@@ -38,7 +38,7 @@ function CommentForm({ onComment, setText, text }: CommentFormProps) {
     )
 }
 
-export default function Post({ data, type }: { data: Post, type: string }) {
+export default function Post({ data, type }: { data: Post, type?: string }) {
     const { post, get, loading } = useFetch()
     const [options, setOptions] = useState(false)
     const images = data.images.map(img => ({ url: img.image }))

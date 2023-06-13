@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import Post from '../components/Post/post'
 import StoriesBar from '../components/home/storiesBar/storiesBar'
 import './pages.scss'
@@ -13,9 +13,7 @@ export default function Home() {
 
     useEffect(() => {
         get('post/?priority=true').then(data =>
-            setPosts(data?.map((post, i) => (
-                <Post key={data.id} data={post} />
-            )))
+            setPosts(data)
         )
     }, [])
 
@@ -24,7 +22,9 @@ export default function Home() {
             <div className="side_container">
                 <StoriesBar />
                 {loading && <p>cargando...</p>}
-                {posts}
+                {posts?.map((post: Post,) => (
+                    <Post key={post.id} data={post} />
+                ))}
             </div>
             <HomeSide />
         </div>

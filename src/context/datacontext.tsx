@@ -40,12 +40,12 @@ export const ApiErrorProvider: React.FC = ({ children }) => {
 
 type PostContextProps = {
   posts: Post[],
-  setPosts: (posts: []) => void
+  setPosts: React.Dispatch<React.SetStateAction<Post[]>>
 };
 
 export const PostContext = createContext<PostContextProps>({ posts: [], setPosts: () => { } })
 
 export const PostProvider: React.FC = ({ children }) => {
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState<Post[]>([])
   return <PostContext.Provider value={{ posts, setPosts }}>{children}</PostContext.Provider>
 }
