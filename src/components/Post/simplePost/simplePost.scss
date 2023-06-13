@@ -1,0 +1,58 @@
+.SimplePostContainer {
+    width: 100%;
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(3, 33.33%);
+    gap: 10px;
+
+    .simple-post {
+        position: relative;
+        display: block;
+        height: 320px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+
+        img {
+            width: 100%;
+            display: block;
+        }
+
+        .hover-data:hover {
+            opacity: 1;
+        }
+
+        .hover-data {
+            opacity: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+
+            svg {
+                width: 20px;
+                fill: #fff;
+                color: #fff;
+                margin-right: 6px;
+            }
+
+            p {
+                display: flex;
+                align-items: center;
+                font-size: 16px;
+                font-weight: bold;
+                color: #fff;
+            }
+        }
+    }
+}
+
+.big {
+    grid-row: span 2;
+    /* Ocupan 2 filas */
+}

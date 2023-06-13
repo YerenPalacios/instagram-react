@@ -10,6 +10,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    .small-post{
+        .image-slider{
+            height: 90vh;
+            &>div{
+                height: 100% !important;
+                object-fit: cover;
+                &>div{
+                    height: 100% !important;
+                    object-fit: cover;
+                }
+            }
+            .rsis-container>div{
+                background-size: contain !important;
+            }
+        }
+    }
 }
 
 .post-detail{

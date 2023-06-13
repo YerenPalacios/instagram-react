@@ -33,15 +33,30 @@ body {
     justify-content: center;
 }
 
-.side_container{
+.side_container {
     max-width: 550px;
 }
 
 .explorePeopleContainer {
     max-width: 550px;
     margin: auto;
-    .users{
+
+    .users {
         background-color: #fff;
         padding: 20px;
+    }
+}
+
+.explore_container {
+    margin: auto;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(3, auto) !important;
+    .simple-post{
+        height: -webkit-fill-available !important;
+        img{
+            height: 100%;
+            object-fit: cover;
+        }
     }
 }

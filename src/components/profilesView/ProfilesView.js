@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react"
-import { useNavigate, useParams, Link } from 'react-router-dom'
+import { useNavigate, useParams} from 'react-router-dom'
 
 import './profilesView.scss'
 import testImg from '../../p.png'
@@ -7,28 +7,7 @@ import { useFetch } from '../../helpers'
 import { AuthContext } from "../../context/datacontext"
 import icons from "../icons"
 import NotFound from "../notFound/notFound"
-import { useDispatch } from "react-redux"
-
-
-function SimplePost({ data }) {
-    const dispatch = useDispatch();
-    function setCurrentPost() {
-        dispatch({
-            type: "SET_CURRENT_POST",
-            payload: data
-        })
-    }
-    return (
-        <div onClick={setCurrentPost} className="simple-post">
-            <img src={data.images && data.images[0].image} />
-            <div className="hover-data">
-                <p>{icons.like_svg} {data.likes_count}</p>
-                <p>{icons.comment} {data.comments_count}</p>
-            </div>
-        </div>
-    )
-}
-
+import { SimplePost } from "../Post/simplePost/simplePost"
 
 function ProfileBody() {
     const { username, tab } = useParams()
@@ -40,7 +19,7 @@ function ProfileBody() {
 
     function get_filter_for_tab(tab){
         if (tab==='saved'){
-            return 'saved=True'
+            return 'is_saved=True'
         }else if(tab=='tagged'){
             return '' //TODO: review how to do this
         } else {

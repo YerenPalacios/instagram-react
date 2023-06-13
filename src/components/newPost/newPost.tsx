@@ -65,7 +65,7 @@ export default function NewPost({ hide }: { hide: Function }) {
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        post('post/').then((postItem: Post) => {
+        post('post/', data).then((postItem: Post) => {
             setPosts([postItem, ...posts])
         })
     }
