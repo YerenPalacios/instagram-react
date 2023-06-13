@@ -41,7 +41,6 @@ export default function NewPost({ hide }) {
 
         files.forEach(i => {
             preview.push({ url: URL.createObjectURL(i) })
-            console.log(i)
 
             getBase64(i).then(
                 data => images.push(data)
@@ -67,7 +66,6 @@ export default function NewPost({ hide }) {
 
     const createPost = () => {
         // TODO: separate fetch in a function with catch errors 
-        console.log(data.images)
         hide(!true)
         fetch(api.url + 'post/', {
             method: 'POST',
