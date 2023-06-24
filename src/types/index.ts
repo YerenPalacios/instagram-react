@@ -44,3 +44,9 @@ type PostComment = {
     likes_count: number,
     is_liked: boolean
 }
+
+type ChatResponse = {
+    id: number,
+    last_message: string,
+    user: User
+}

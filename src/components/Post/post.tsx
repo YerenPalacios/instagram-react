@@ -107,13 +107,20 @@ export default function Post({ data, type }: { data: Post, type?: string }) {
         })
     }
 
+    function setCurrentSharingPost() {
+        dispatch({
+            type: "SET_CURRENT_SHARING_POST",
+            payload: data
+        })
+    }
+
     const buttons = <div className="buttons">
         <div>
             <button ref={likeButton} onClick={handleLike}>
                 {liked ? ico.liked_svg : ico.like_svg}
             </button>
             <button onClick={setCurrentPost}>{ico.comment}</button>
-            <button>{ico.share}</button>
+            <button onClick={setCurrentSharingPost}>{ico.share}</button>
         </div>
         <button onClick={handleSave}>{saved ? ico.saved : ico.save}</button>
     </div>
