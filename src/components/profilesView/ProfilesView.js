@@ -3,7 +3,7 @@ import { useNavigate, useParams} from 'react-router-dom'
 
 import './profilesView.scss'
 import testImg from '../../p.png'
-import { useFetch } from '../../helpers'
+import { getUserImage, useFetch } from '../../helpers'
 import { AuthContext } from "../../context/datacontext"
 import icons from "../icons"
 import NotFound from "../notFound/notFound"
@@ -90,7 +90,7 @@ export default function ProfilesView() {
     return (
         <>
             <div className="profilesView">
-                <div className="user-image"><img src={user.image || testImg} alt="" /></div>
+                <div className="user-image"><img src={getUserImage(user)} alt="" /></div>
                 <div className="profile-data">
                     <div className="profile-name">
                         <h1>{user.username}</h1>

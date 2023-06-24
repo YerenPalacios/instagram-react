@@ -113,3 +113,27 @@ $border: 1px solid #ccc;
         }
     }
 }
+
+.post-message{
+    .user{
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    a{
+        text-decoration: none;
+        color: rgb(0, 2, 107)
+    }
+    .image{
+        width: 35px;
+        height: 35px;
+        margin-right: 10px;
+    }
+    .post-content{
+        img{
+            width: calc(100% + 28px);
+            margin-left: -14px;
+        }
+    }
+
+}

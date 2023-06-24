@@ -1,12 +1,14 @@
 import './chatBox.scss';
 import infoIcon from './info.png'
 import { default as icon } from './../icons'
-import moment from 'moment';
 import { useState, useEffect, useContext} from 'react';
 import api from '../../api.json'
 
 import testImg from '../../p.png'
 import { ApiErrorContext, AuthContext } from '../../context/datacontext';
+import { getUserImage, useFetch } from '../../helpers';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const connectionStates = [
     'Connecting',
@@ -15,6 +17,36 @@ const connectionStates = [
     'Closed',
     'Uninstantiated',
 ];
+
+function PostMessage({post_id}){
+    const {get} = useFetch()
+    const dispatch = useDispatch();
+    const [postInfo, setPostInfo] = useState({})
+
+    useEffect(() => {
+        get('post/'+post_id).then(data=>setPostInfo(data))
+    }, []);
+
+    const handleClick = ()=>{
+        dispatch({
+            type: "SET_CURRENT_POST",
+            payload: postInfo
+        })
+    }
+
+    if (postInfo.images){
+        console.log(postInfo.images[0].image)
+    }
+
+    return <div className="post-message">
+        <div className="user">
+            <div className="image"><img src={postInfo.user && getUserImage(postInfo.user)} alt="" /></div>
+            <Link to={"/"+postInfo.user?.username}>{postInfo.user?.username}</Link>
+        </div>
+        <div className='post-content' onClick={handleClick}><img src={postInfo.images && postInfo.images[0].image} alt="" /></div>
+        <div><b>{postInfo.user?.username}</b>&nbsp;&nbsp;{postInfo.text}</div>
+    </div>
+}
 
 export default function ChatBox({ room }) {
     const [ws, setWs] = useState()
@@ -83,7 +115,7 @@ export default function ChatBox({ room }) {
                         {messages.map((v, i) => {
                             let cl = 'item other'
                             if (room.user.id !== v.user) cl = 'item'
-                            if (v.is_post) return <div className={cl}>{parseInt(v.content)}</div>
+                            if (v.is_post) return <div className={cl}><PostMessage key={i} post_id={parseInt(v.content)}/></div>
                             return (<div key={i} className={cl}>{v.content}</div>)
                         })}
 

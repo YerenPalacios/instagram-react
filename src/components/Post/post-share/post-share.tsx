@@ -3,6 +3,7 @@ import './post-share.scss';
 import ChatListHook from '../../../hooks/chatLisHook';
 import { getUserImage } from '../../../helpers';
 import Loading from '../../Base/loading/loading';
+import { useDispatch } from 'react-redux';
 
 type ShareListParams = {
   post_id: number,
@@ -10,6 +11,7 @@ type ShareListParams = {
 }
 
 const PostShare = ({data}: {data:Post}) => {
+  const dispatch = useDispatch()
   const { chatList, loading, createChatPostMessage} = ChatListHook()
   const [shareList, setShareList] = useState<ShareListParams[]>([])
   const inputMessageRef = useRef<HTMLInputElement | null>(null)
@@ -25,6 +27,9 @@ const PostShare = ({data}: {data:Post}) => {
   const handleSharePost = ()=>{
     shareList.forEach(item=>{
       createChatPostMessage(item.chat_room_id, item.post_id, inputMessageRef.current?.value ?? '')
+      .then(()=>dispatch({
+          type: "CLEAN_SHARING_POST"
+      }))
     })
   }
 
