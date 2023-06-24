@@ -41,7 +41,7 @@ function CommentForm({ onComment, setText, text }: CommentFormProps) {
 export default function Post({ data, type }: { data: Post, type?: string }) {
     const { post, get, loading } = useFetch()
     const [options, setOptions] = useState(false)
-    const images = data.images.map(img => ({ url: img.image }))
+    const images: {url: string}[] = data.images.map(img => ({ url: img.image }))
     var date = moment(data.created_at).fromNow()
     const [comments, setComments] = useState<PostComment[]>([])
     const likeButton = useRef<HTMLButtonElement>(null)

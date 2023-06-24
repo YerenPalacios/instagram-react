@@ -2,7 +2,12 @@ import { combineReducers, createStore } from "redux";
 
 const initialState = { current_post: null }
 
-const postsReducer = (state = initialState.current_post, action) => {
+type PostReducerAction = {
+    payload: Post
+    type: string
+}
+
+const postsReducer = (state = initialState.current_post, action:PostReducerAction) => {
     switch (action.type) {
         case 'SET_CURRENT_POST':
             return action.payload;
@@ -13,7 +18,7 @@ const postsReducer = (state = initialState.current_post, action) => {
     }
 };
 
-const sharingPostsReducer = (state = initialState.current_post, action) => {
+const sharingPostsReducer = (state = initialState.current_post, action:PostReducerAction) => {
     switch (action.type) {
         case 'SET_CURRENT_SHARING_POST':
             return action.payload;
@@ -32,7 +37,7 @@ const reducer = combineReducers({
 // Crea el store de Redux utilizando el reducer
 const store = createStore(
     reducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
 
 );
 

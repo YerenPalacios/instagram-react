@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ChatBox from '../chatBox/chatBox';
 import { useFetch } from '../../helpers'
 import './chatContainer.scss';
@@ -11,19 +11,19 @@ export default function ChatContainer() {
     const { username } = useParams()
     const navigate = useNavigate()
     const { get } = useFetch()
-    const [users, setUsers] = useState([])
-    const [actualChat, setActualChat] = useState(null)
+    const [users, setUsers] = useState<ChatResponse[]>([])
+    const [actualChat, setActualChat] = useState<ChatResponse | null>(null)
 
     useEffect(() => {
         get('chatlist/').then(data => {
             setUsers(data)
             username && setActualChat(
-                users.find((i) => (i.user.username === username && i))
+                users.find((i) => (i.user.username === username ?? i)) ?? null
             )
         })      
     }, [username])
 
-    const openChat = (room) => {
+    const openChat = (room: {user: User}) => {
         console.log(room, actualChat)
         navigate('/inbox/' + room.user.username)
     }
@@ -37,7 +37,7 @@ export default function ChatContainer() {
                             <img src={i.user.image ? api.url + i.user.image : testImg} alt="" />
                             <div>
                                 <p>{i.user.name}</p>
-                                {i.last_message.content && <p>{i.last_message.content} . {moment(i.last_message.timestamp).from()}</p>}
+                                {i.last_message.content && <p>{i.last_message.content} . {moment(i.last_message.timestamp).fromNow()}</p>}
                             </div>
                         </div>
                     ))}

@@ -1,22 +1,22 @@
 import './search.scss'
 import { getUserImage, useFetch } from '../../helpers'
-import { useState } from 'react';
+import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Search() {
     const { get, loading } = useFetch()
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState<User[]>([]);
 
-    const handleSearch = ({ target }) => {
+    const handleSearch = ({ target }: ChangeEvent<HTMLInputElement>) => {
         let value = target.value
         get('user/?search=' + value).then(
             data => setUsers(data)
         )
     }
 
-    const handleClick= ({target})=>{
+    const handleClick= ({target}: MouseEvent<HTMLElement>)=>{
         //TODO: send to recent search
-        console.log(target.dataset.id)
+        // console.log(target.dataset.id)
     }
 
     return <div className='search'>

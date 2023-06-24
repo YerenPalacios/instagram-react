@@ -4,7 +4,7 @@ import { useState } from "react"
 import { getUserImage, useFetch } from "../../../helpers"
 import { Link } from 'react-router-dom'
 
-export function ProfileInfo({ data, style }: {data: User, style: string}) {
+export function ProfileInfo({ data, style }: {data: User, style?: string}) {
     const { post, remove, loading } = useFetch()
     const [following, setFollowing] = useState(data.is_following)
     // TODO: origanize this big and small style

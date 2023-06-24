@@ -1,11 +1,11 @@
 import './storiesBar.scss'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import { getUserImage, useFetch } from '../../../helpers'
 
 export default function StoriesBar() {
-    const [profiles, setProfiles] = useState([])
+    const [profiles, setProfiles] = useState<User[]>([])
     const { get, loading } = useFetch()
 
     useEffect(() => {

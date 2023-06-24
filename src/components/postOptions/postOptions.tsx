@@ -1,12 +1,12 @@
 import './postOptions.scss';
-import api from './../../api.json'
+import React, { useState }  from 'react'
+import api from '../../api.json'
 import { getToken } from '../../helpers';
-import { useState } from 'react';
 import Error from '../errors/error';
 import { useNavigate } from 'react-router-dom';
 
 
-export default function PostOptions({id,hide}){
+export default function PostOptions({id,hide}: {id: number, hide: (value: boolean)=>void}){
     const navigate = useNavigate()
     const [error, setError] = useState(false)
     const url = `${api.url}post/${id}`
@@ -22,7 +22,7 @@ export default function PostOptions({id,hide}){
         .then(res=>{
             if (!res.ok) setError(res)
             hide(!true)
-            window.location.reload(false)
+            window.location.reload()
             return res.json()
         })
         .then(data => {

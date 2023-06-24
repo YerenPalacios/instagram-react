@@ -1,6 +1,6 @@
 import { default as ico } from '../icons'
 import './header.scss'
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, ReactChild, ReactChildren, ReactElement } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import NewPost from '../newPost/newPost';
 import { useContext } from 'react';
@@ -9,17 +9,17 @@ import { getUserImage } from '../../helpers';
 import Search from '../search/search';
 import Notifications from './notifications/notifications';
 
-function useComponentVisible(initialIsVisible) {
-    const [isVisible, setIsComponentVisible] = useState(initialIsVisible);
-    const ref = useRef(null);
+function useComponentVisible(initialIsVisible: boolean) {
+    const [isVisible, setIsComponentVisible] = useState<Boolean>(initialIsVisible);
+    const ref = useRef<HTMLDivElement | null>(null);
 
-    const handleClickOutside = (event) => {
-        if (ref.current && !ref.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+        if (ref.current && !ref.current.contains(event.target as Node)) {
             setIsComponentVisible(false);
         }
     };
-    const handleClickin = (event) => {
-        if (ref.current && ref.current.contains(event.target)) {
+    const handleClickin = (event: MouseEvent) => {
+        if (ref.current && ref.current.contains(event.target as Node)) {
             setIsComponentVisible(true);
         }
     };
@@ -69,10 +69,10 @@ function UserMenu() {
 
 export default function Header() {
     const [showNewPostDiv, setShowNewPostDiv] = useState(false);
-    const [currentTab, setCurrentTab] = useState();
-    const header = useRef()
+    const [currentTab, setCurrentTab] = useState<ReactElement>();
+    const header = useRef<HTMLDivElement | null>(null)
 
-    const changeTab = (component) => {
+    const changeTab = (component: ReactElement) => {
         if (currentTab?.type == component?.type) {
             header.current?.classList.remove('without_labels')
             setCurrentTab(undefined)
@@ -102,9 +102,17 @@ export default function Header() {
     )
 }
 
-function Icon({ ico, label, type = 'button', to = '/', onClick = undefined }) {
+type IconParams = { 
+    ico: JSX.Element,
+    label: string,
+    type?: string,
+    to?: string,
+    onClick?: ()=>void | null
+}
+
+function Icon({ ico, label, type = 'button', to = '/', onClick }: IconParams) {
     const location = useLocation()
-    const getCurrent = (e) => {
+    const getCurrent = (e: string) => {
         if (location.pathname === e) return 'current'
     }
     switch (type) {

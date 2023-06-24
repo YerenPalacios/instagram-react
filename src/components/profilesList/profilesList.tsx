@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useFetch } from "../../helpers";
 import { ProfileInfo } from "../shared/profileInfo/profileInfo";
 
-export default function ProfilesList({ limit = null }: {limit: number | null}) {
+export default function ProfilesList({ limit = null }: {limit?: number | null}) {
     const { get } = useFetch()
     const [users, setUsers] = useState([])
 

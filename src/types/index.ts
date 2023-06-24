@@ -10,7 +10,10 @@ type User = {
     name: string,
     phone: string,
     username: string,
-    color: string
+    color: string,
+    followers_count: number | undefined,
+    following_count: number | undefined,
+    posts_count: number | undefined
 }
 
 type Auth = {
@@ -45,8 +48,16 @@ type PostComment = {
     is_liked: boolean
 }
 
+type Message = {
+    content: string,
+    is_post: boolean,
+    room: number,
+    timestamp: string,
+    user: number
+}
+
 type ChatResponse = {
     id: number,
-    last_message: string,
+    last_message: Message,
     user: User
 }

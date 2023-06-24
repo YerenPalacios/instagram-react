@@ -1,7 +1,8 @@
 import './ImageSlider.scss'
+import React from 'react'
 import SimpleImageSlider from 'react-simple-image-slider'
 
-export default function ImageSlider({images}) {
+export default function ImageSlider({images}:{images: {url: string}[]}) {
     return <div className="image-slider">
         {images.length === 1 ?
             <SimpleImageSlider

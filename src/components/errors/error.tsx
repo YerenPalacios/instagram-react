@@ -1,7 +1,12 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import './error.scss'
 
-export default function Error({error}){
+type ErrorObj = {
+    status: string,
+    statusText: string
+}
+
+export default function Error({error}: {error: ErrorObj}){
     const [show, setShow] = useState(true)
     const [styles,setStyles] = useState({transform: 'rotateX(90deg)'})
 

@@ -1,5 +1,4 @@
-import { useContext } from "react"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext  } from "react"
 import api from '../../api.json'
 import { AuthContext } from "../../context/datacontext"
 import { getToken, UpdateUserSesion } from '../../helpers'
@@ -12,11 +11,13 @@ export function ProfileForm() {
 
     const [updateData, setUpdateData] = useState({
         username: '',
-        password: ''
+        description: '',
+        email: '',
+        name: ''
     })
 
     useEffect(() => {
-        fetch(api.url + "user/" + authContext.auth.user.username, {
+        fetch(api.url + "user/" + authContext?.auth?.user.username, {
             headers: { 'Authorization': getToken() }
         })
             .then(res => res.json())
@@ -39,7 +40,7 @@ export function ProfileForm() {
     }
 
     const handleSubmitData = () => {
-        fetch(api.url + "user/" + authContext.auth.user.username, {
+        fetch(api.url + "user/" + authContext?.auth?.user.username, {
             method: 'PUT',
             headers: {
                 'Authorization': getToken(),

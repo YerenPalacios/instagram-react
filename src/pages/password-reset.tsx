@@ -1,14 +1,14 @@
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 import { useFetch } from '../helpers'
 import './../components/form/loginForm.scss'
 
 export default function ResetPasswordForm() {
-    const userInfo = useRef()
+    const userInfo = useRef<HTMLInputElement|null>(null)
 
     const {sendRecoveryEmail} = useFetch()
 
     const handleResetPasword = ()=>{
-        sendRecoveryEmail({'email': userInfo.current.value})
+        sendRecoveryEmail({'email': userInfo.current?.value})
     }
 
     return (
