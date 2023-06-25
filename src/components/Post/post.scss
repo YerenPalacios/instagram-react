@@ -100,6 +100,9 @@
         color: #262626;
         margin-right: 15px;
     }
+    .options-button{
+        cursor: pointer;
+    }
 
     .user {
         display: flex;
@@ -108,6 +111,10 @@
         grid-gap: 15px;
         font-weight: 500;
         font-size: 15px;
+        a{
+            text-decoration: none;
+            color: #002486
+        }
 
         .icon {
             @extend .image;

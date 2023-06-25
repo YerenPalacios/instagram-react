@@ -4,34 +4,14 @@ import { useContext } from 'react'
 import { ApiErrorContext, AuthContext } from './context/datacontext'
 import { API_URL, LOGIN_PATH, NO_AUTH_PATHS, SIGN_PATH } from './constants'
 
-const getUser = () => {
-    let auth = localStorage.getItem('auth')
-    if (auth) {
-        let user = JSON.parse(auth)
-        return user
-    }
-}
-
-export const getToken = () => {
-    const user = getUser()
-    return user && 'Token ' + user.token
-}
-
-export const getUserSesion = () => {
-    let authData = localStorage.getItem('auth')
-    if (authData) {
-        return JSON.parse(authData)
-    }
-    window.location.href = '/login'
-}
 
 export function UpdateUserSesion(user: User) {
     let authData = localStorage.getItem('auth')
     if (authData) {
         let authDataObj = JSON.parse(authData)
-        user.image = user.image.replace(API_URL, '')
+        user.image = user.image?.replace(API_URL, '')
         authDataObj.user = user
-        localStorage.setItem('auth', JSON.stringify(authData))
+        localStorage.setItem('auth', JSON.stringify(authDataObj))
         return true
     }
     return false
@@ -50,10 +30,9 @@ export const useFetch = (auto_errors = true) => {
         };
     }, []);
 
-    const runFetch = (path: string, options = {}):Promise<any> => {
+    const runFetch = (path: string, options: RequestInit = {}): Promise<any> => {
 
         return new Promise((resolve, reject) => {
-            
             if (!auth && !NO_AUTH_PATHS.includes(path)) {
                 navigate('/login')
                 reject(new Error('nada'))
@@ -68,14 +47,17 @@ export const useFetch = (auto_errors = true) => {
                             res.json().then((data => {
                                 throw setError(data[Object.keys(data)[0]])
                             }))
-                        else return res.json()
+                        else {
+                            if (options.method === 'DELETE') {
+                                return null
+                            }
+                            return res.json()
+                        }
                     }).catch(e => {
                         throw setError('¡Ha ocurrido un error!')
                     }).finally(() => setLoading(false))
                 )
             }
-
-
         })
     }
 
@@ -143,6 +125,20 @@ export const useFetch = (auto_errors = true) => {
         return runFetch(path, options)
     }
 
+    const put = (path: string, body = {}) => {
+        setLoading(true);
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Token ' + auth?.token,
+            },
+            body: JSON.stringify(body)
+        }
+
+        return runFetch(path, options)
+    }
+
     const remove = (path: string, body = {}) => {
         setLoading(true);
         const options = {
@@ -157,10 +153,10 @@ export const useFetch = (auto_errors = true) => {
         return runFetch(path, options)
     }
 
-    return { get, post, remove, login, sign, error, loading, setLoading, sendRecoveryEmail };
+    return { get, post, put, remove, login, sign, error, loading, setLoading, sendRecoveryEmail };
 }
 
-export function getUserImage(user: User){
+export function getUserImage(user: User) {
     // TODO: add user color field??
     if (user.image) return user.image.includes('http') ? user.image : API_URL + user.image
     const letter = user.username?.slice(0, 1).toUpperCase()

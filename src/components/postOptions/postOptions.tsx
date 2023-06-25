@@ -1,44 +1,27 @@
 import './postOptions.scss';
-import React, { useState }  from 'react'
-import api from '../../api.json'
-import { getToken } from '../../helpers';
-import Error from '../errors/error';
+import React, { useContext } from 'react'
+import { useFetch } from '../../helpers';
 import { useNavigate } from 'react-router-dom';
+import { PostContext } from '../../context/datacontext';
 
 
-export default function PostOptions({id,hide}: {id: number, hide: (value: boolean)=>void}){
+export default function PostOptions({ id, hide }: { id: number, hide: (value: boolean) => void }) {
     const navigate = useNavigate()
-    const [error, setError] = useState(false)
-    const url = `${api.url}post/${id}`
-    const options = {
-        method: 'DELETE',
-        headers:{
-            'Authorization':getToken()
-        },
-    }
-
+    const { remove } = useFetch()
+    const { posts, setPosts } = useContext(PostContext)
     const handleDelete = () => {
-        fetch(url, options)
-        .then(res=>{
-            if (!res.ok) setError(res)
-            hide(!true)
-            window.location.reload()
-            return res.json()
-        })
-        .then(data => {
-            console.log(data) 
-            setError(false)
+        remove('post/' + id).then(()=>{
+            setPosts(posts.filter(post=>post.id !== id))
         })
     }
 
     const goPost = () => {
-        navigate('post/'+id)
+        navigate('post/' + id)
     }
 
-    return(
+    return (
         <div className="post-options">
-            {error?<Error error={error}/>:null}
-            <div onClick={()=>hide(!true)} className="close-item"></div>
+            <div onClick={() => hide(false)} className="close-item"></div>
             <div className="options">
                 <button onClick={handleDelete}>Eliminar</button>
                 <button onClick={goPost}>Ir a la publicación</button>

@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useContext  } from "react"
+import React, { useEffect, useState, useContext, ChangeEvent } from "react"
 import api from '../../api.json'
 import { AuthContext } from "../../context/datacontext"
-import { getToken, UpdateUserSesion } from '../../helpers'
+import { UpdateUserSesion, useFetch } from '../../helpers'
 import './profileForm.scss'
 
 
 export function ProfileForm() {
     const authContext = useContext(AuthContext)
-    const [user, setUser] = useState({})
+    const { get, put } = useFetch()
+    const [user, setUser] = useState<User>()
 
     const [updateData, setUpdateData] = useState({
         username: '',
@@ -17,10 +18,7 @@ export function ProfileForm() {
     })
 
     useEffect(() => {
-        fetch(api.url + "user/" + authContext?.auth?.user.username, {
-            headers: { 'Authorization': getToken() }
-        })
-            .then(res => res.json())
+        get("user/" + authContext?.auth?.user.username)
             .then(data => {
                 setUser(data)
                 setUpdateData({
@@ -32,7 +30,7 @@ export function ProfileForm() {
             })
     }, [authContext])
 
-    const handleUpdateData = ({ target }) => {
+    const handleUpdateData = ({ target }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setUpdateData({
             ...updateData,
             [target.name]: target.value
@@ -40,29 +38,22 @@ export function ProfileForm() {
     }
 
     const handleSubmitData = () => {
-        fetch(api.url + "user/" + authContext?.auth?.user.username, {
-            method: 'PUT',
-            headers: {
-                'Authorization': getToken(),
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updateData)
-        }).then(res => res.json())
-            .then(data => {
+        put("user/" + authContext?.auth?.user.username, updateData)
+            .then((data: User) => {
                 if (UpdateUserSesion(data)) {
-                    authContext.setAuth({ ...authContext.auth, user: data })
+                    let token = authContext.auth?.token ?? ''
+                    authContext.setAuth({ token, user: data })
                     // setAuth(getUserSesion())
                 }
-
             })
     }
 
     return (
         <div className="profile-form">
             <div className="profile">
-                <img src={user.image} alt="" />
+                <img src={user?.image} alt="" />
                 <div>
-                    <p>{user.username}</p>
+                    <p>{user?.username}</p>
                     <p className="change-image">Cambiar foto del perfil</p>
                 </div>
             </div>
@@ -89,7 +80,7 @@ export function ProfileForm() {
 
 export function PasswordForm() {
     const { auth } = useContext(AuthContext)
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState<User>()
 
     const [passwordData, setPasswordData] = useState({
         lastPassword: '',
@@ -101,7 +92,7 @@ export function PasswordForm() {
         auth && setUser(auth.user)
     }, [])
 
-    const handlePasswordData = ({ target }) => {
+    const handlePasswordData = ({ target }: ChangeEvent<HTMLInputElement>) => {
         setPasswordData({
             ...passwordData,
             [target.name]: target.value
@@ -115,9 +106,9 @@ export function PasswordForm() {
     return (
         <div className="profile-form">
             <div className="profile">
-                <img src={api.url + user.image} alt="" />
+                <img src={api.url + user?.image} alt="" />
                 <div>
-                    <p>{user.username}</p>
+                    <p>{user?.username}</p>
                 </div>
             </div>
             <div className="input">

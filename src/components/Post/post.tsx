@@ -9,6 +9,7 @@ import ImageSlider from '../Base/ImageSlider/ImageSlider'
 import { useDispatch } from 'react-redux'
 import { getUserImage } from '../../helpers'
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 // TODO: posts must have just user comments in main view
 
@@ -46,19 +47,9 @@ export default function Post({ data, type }: { data: Post, type?: string }) {
     const [comments, setComments] = useState<PostComment[]>([])
     const likeButton = useRef<HTMLButtonElement>(null)
 
-    // function mapComments(comments: PostComment[]) {
-    //     return comments.map((c, i) => (
-    //         <p key={i} className="comment"><b>{c.user.name} </b>{c.text}</p>
-    //     ))
-    // }
-
     const [liked, setLiked] = useState(data.is_liked)
     const [saved, setSaved] = useState(data.is_saved)
     const [numLikes, setNumLikes] = useState(data.likes_count)
-    // const [userComments, setUserComments] = useState({
-    //     comments: mapComments([]),
-    //     count: data.comments_count
-    // })
     const dispatch = useDispatch();
 
     const [text, setText] = useState('')
@@ -141,10 +132,10 @@ export default function Post({ data, type }: { data: Post, type?: string }) {
     const head = <div className="head">
         <div className="user">
             <div className='icon'><img src={getUserImage(data.user)} alt="user" /></div>
-            <p>{data.user.username}</p>
+            <Link to={'/'+data.user.username}>{data.user.username}</Link>
         </div>
         {/* TODO: this button is not working in small post */}
-        <button onClick={() => { setOptions(true) }}>•••</button>
+        <button className='options-button' onClick={() => { setOptions(true) }}>•••</button>
     </div>
 
     const comment_form = <CommentForm text={text} setText={setText} onComment={handleComment} />

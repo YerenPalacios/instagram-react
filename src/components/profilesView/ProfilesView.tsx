@@ -7,13 +7,14 @@ import { AuthContext } from "../../context/datacontext"
 import icons from "../icons"
 import NotFound from "../notFound/notFound"
 import { SimplePost } from "../Post/simplePost/simplePost"
+import Loading from "../Base/loading/loading"
 
 function ProfileBody() {
-    const { username, tab } = useParams<{ username: string, tab: string }>()
-    const { get, loading } = useFetch()
     const navigate = useNavigate()
+    const { get, loading } = useFetch()
     const { auth } = useContext(AuthContext)
-
+    const { username, tab } = useParams<{ username: string, tab: string }>()
+    
     const [posts, setPosts] = useState([])
 
     function get_filter_for_tab(tab: string | undefined) {
@@ -34,12 +35,12 @@ function ProfileBody() {
         <div className="profile-body">
             <ul className="tablist">
                 {/* TODO: review tabs */}
-                <li className={!tab ? 'current' : ''} onClick={() => navigate(`/${username}`)}>{icons.posts} Publicaciones</li>
-                <li className={tab === 'saved' ? 'current' : ''} onClick={() => navigate(`/${username}/saved`)}>{icons.save} Guardado</li>
-                <li className={tab === 'tagged' ? 'current' : ''} onClick={() => navigate(`/${username}/tagged`)}>{icons.tagged} Etiquetadas</li>
+                <li className={!tab ? 'current' : ''} onClick={() => navigate(`/${username}`)}>{icons.posts}<p>Publicaciones</p></li>
+                <li className={tab === 'saved' ? 'current' : ''} onClick={() => navigate(`/${username}/saved`)}>{icons.save}<p>Guardado</p></li>
+                <li className={tab === 'tagged' ? 'current' : ''} onClick={() => navigate(`/${username}/tagged`)}>{icons.tagged}<p>Etiquetadas</p></li>
             </ul>
-            {loading && 'cargando...'}
-            <div className="SimplePostContainer">{posts}</div>
+            {loading ? <Loading /> : <div className="SimplePostContainer">{posts}</div>}
+
         </div>
     )
 }
@@ -71,17 +72,16 @@ export default function ProfilesView() {
     }
 
     const handleFollow = () => {
-        //TODO: validate that user cannot click if nothing loaded
         let body = { "following": user?.id }
         if (!following)
             post('follow/', body).then(() => {
                 setFollowing(!following)
-                setUser({ ...user, followers_count: user.followers_count + 1 })
+                user && setUser({ ...user, followers_count: user.followers_count ?? 0 + 1 })
             })
         else
             remove('follow/', body).then(() => {
                 setFollowing(!following)
-                setUser({ ...user, followers_count: user.followers_count - 1 })
+                user && setUser({ ...user, followers_count: user.followers_count ?? 0 - 1 })
             })
     }
 
