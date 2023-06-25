@@ -21,15 +21,16 @@ type Auth = {
     user: User
 };
 
-type Image = {
-    image: string
+type PostFile = {
+    file: string,
+    thumbnail?: string
 }
 
 type Post = {
     comments_count: number,
     created_at: string,
     id: number,
-    images: Image[],
+    files: PostFile[],
     is_liked: boolean,
     is_saved: boolean,
     likes_count: number,

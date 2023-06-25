@@ -11,6 +11,9 @@
     background-color: #fff;
     border: 1px solid #e6e6e6;
     margin-bottom: 25px;
+    .slider{
+        height: 600px;
+    }
 }
 
 .small-post {
@@ -35,6 +38,9 @@
         height: -webkit-fill-available;
         max-height: 52vh;
         overflow: auto;
+    }
+    .slider{
+        height: 87vh;
     }
 }
 

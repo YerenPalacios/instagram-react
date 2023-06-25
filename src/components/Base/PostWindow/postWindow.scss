@@ -11,6 +11,7 @@
     align-items: center;
     justify-content: center;
     .small-post{
+        max-height: 90vh;
         .image-slider{
             height: 90vh;
             &>div{

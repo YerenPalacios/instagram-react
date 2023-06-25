@@ -31,15 +31,15 @@ export default function NewPost({ hide }: { hide: Function }) {
     const [actualMedia, setActualMedia] = useState<{ url: string }[]>([])
     const { auth } = useContext(AuthContext)
     const { posts, setPosts } = useContext(PostContext)
-    const [data, setData] = useState<{ images: string[], text: string }>({
-        images: [],
+    const [data, setData] = useState<{ files: string[], text: string }>({
+        files: [],
         text: ""
     })
 
     const handleAddFile = ({ target }: { target: HTMLInputElement | { files: FileList } }) => {
         // TODO: remember how to send images :u
         const files = Array.from(target.files ?? [])
-        const images: string[] = data.images
+        const images: string[] = data.files
         const preview: { url: string }[] = []
 
         files.forEach(i => {
@@ -51,7 +51,7 @@ export default function NewPost({ hide }: { hide: Function }) {
             )
         })
 
-        setData({ ...data, images: images });
+        setData({ ...data, files: images });
         setActualMedia(preview)
         setAddingMedia(false)
     }
@@ -95,8 +95,8 @@ export default function NewPost({ hide }: { hide: Function }) {
                     <h1>{t('Create a new post')}</h1>
                     <div>
                         <img src={icon} alt="add photo" />
-                        <p>Arrastra las fotos y los videos aquí</p>
-                        <input onChange={handleAddFile} type="file" id="images" accept="image/png, image/jpeg" multiple />
+                        <p>Arrastra o pega las fotos y los videos aquí</p>
+                        <input onChange={handleAddFile} type="file" id="images" accept="image/png, image/jpeg, video/mp4" multiple />
                         <label htmlFor='images'>seleccionar de la computadora</label>
                     </div>
                 </div>

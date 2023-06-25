@@ -54,6 +54,7 @@ export const useFetch = (auto_errors = true) => {
                             return res.json()
                         }
                     }).catch(e => {
+                        // TODO: fix when server is not active
                         throw setError('¡Ha ocurrido un error!')
                     }).finally(() => setLoading(false))
                 )

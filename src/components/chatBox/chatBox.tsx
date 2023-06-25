@@ -17,10 +17,11 @@ const connectionStates = [
     'Uninstantiated',
 ];
 
-function PostMessage({ post_id }: {post_id: number}) {
+function PostMessage({ post_id }: { post_id: number }) {
     const { get } = useFetch()
     const dispatch = useDispatch();
     const [postInfo, setPostInfo] = useState<Post>()
+    const [image, setImage] = useState(postInfo?.files ? postInfo?.files[0].file : '')
 
     useEffect(() => {
         get('post/' + post_id).then(data => setPostInfo(data))
@@ -33,12 +34,18 @@ function PostMessage({ post_id }: {post_id: number}) {
         })
     }
 
+    useEffect(()=>{
+        setImage(postInfo?.files[0].thumbnail ?? '')
+    }, [postInfo])
+
     return <div className="post-message">
         <div className="user">
             <div className="image"><img src={postInfo?.user && getUserImage(postInfo.user)} alt="" /></div>
             <Link to={"/" + postInfo?.user?.username}>{postInfo?.user?.username}</Link>
         </div>
-        <div className='post-content' onClick={handleClick}><img src={postInfo?.images && postInfo?.images[0].image} alt="" /></div>
+        <div className='post-content' onClick={handleClick}>
+            <img src={image} alt="" />
+        </div>
         <div><b>{postInfo?.user?.username}</b>&nbsp;&nbsp;{postInfo?.text}</div>
     </div>
 }
@@ -49,7 +56,7 @@ type ChatRoom = {
     user: User
 }
 
-export default function ChatBox({ room }: {room: ChatRoom}) {
+export default function ChatBox({ room }: { room: ChatRoom }) {
     const [ws, setWs] = useState<WebSocket>()
     const [connectionStatus, setConnectionStatus] = useState(3)
     const [messages, setMessages] = useState<Message[]>([])
@@ -94,10 +101,11 @@ export default function ChatBox({ room }: {room: ChatRoom}) {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const message = e.target['message']
         ws?.send(JSON.stringify(
-            { action: 'add_message', text: e.target['message'].value }
+            { action: 'add_message', text: message.value }
         ))
-        e.target['message'].value = ''
+        message.value = ''
     }
 
     return (
