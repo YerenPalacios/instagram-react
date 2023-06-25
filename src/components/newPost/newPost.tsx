@@ -29,7 +29,6 @@ export default function NewPost({ hide }: { hide: Function }) {
     const { post } = useFetch()
     const [addingMedia, setAddingMedia] = useState(true)
     const [actualMedia, setActualMedia] = useState<{ url: string }[]>([])
-    const [publishing, setPublishing] = useState(false)
     const { auth } = useContext(AuthContext)
     const { posts, setPosts } = useContext(PostContext)
     const [data, setData] = useState<{ images: string[], text: string }>({
@@ -54,9 +53,7 @@ export default function NewPost({ hide }: { hide: Function }) {
 
         setData({ ...data, images: images });
         setActualMedia(preview)
-
         setAddingMedia(false)
-        setPublishing(true)
     }
 
     const handleChange = ({ target }: ChangeEvent<HTMLTextAreaElement>) => {
@@ -67,6 +64,7 @@ export default function NewPost({ hide }: { hide: Function }) {
         event.preventDefault()
         post('post/', data).then((postItem: Post) => {
             setPosts([postItem, ...posts])
+            hide(false)
         })
     }
 
@@ -117,7 +115,7 @@ export default function NewPost({ hide }: { hide: Function }) {
                         </div>
                         <div className="form-data">
                             <div className="user">
-                                <img src={auth ? getUserImage(auth.user) : undefined} alt="" />
+                                <img src={auth && getUserImage(auth.user)} alt="" />
                                 <p>{auth?.user.username}</p>
                             </div>
                             <textarea

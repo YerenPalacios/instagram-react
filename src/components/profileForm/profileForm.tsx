@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, ChangeEvent } from "react"
 import api from '../../api.json'
 import { AuthContext } from "../../context/datacontext"
-import { UpdateUserSesion, useFetch } from '../../helpers'
+import { UpdateUserSesion, getUserImage, useFetch } from '../../helpers'
 import './profileForm.scss'
 
 
@@ -51,7 +51,7 @@ export function ProfileForm() {
     return (
         <div className="profile-form">
             <div className="profile">
-                <img src={user?.image} alt="" />
+                <img src={user && getUserImage(user)} alt="" />
                 <div>
                     <p>{user?.username}</p>
                     <p className="change-image">Cambiar foto del perfil</p>
@@ -106,7 +106,7 @@ export function PasswordForm() {
     return (
         <div className="profile-form">
             <div className="profile">
-                <img src={api.url + user?.image} alt="" />
+                <img src={user && getUserImage(user)} alt="" />
                 <div>
                     <p>{user?.username}</p>
                 </div>

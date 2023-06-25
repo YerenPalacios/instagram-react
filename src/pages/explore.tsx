@@ -17,8 +17,6 @@ export default function Explore() {
 
         return <SimplePost key={item.id} data={item} />
     })
-    console.log(posts)
-
     useEffect(() => {
         get(`post/?&limit=${limit}&offset=${offset}`).then((data: Post[]) =>
             setPosts(prev => {
@@ -33,9 +31,9 @@ export default function Explore() {
         )
     }, [offset])
 
-    return <Page><div className="explore_container SimplePostContainer">
-        {withClasses}
-    </div>
-
+    return <Page>
+        <div className="explore_container SimplePostContainer">
+            {withClasses}
+        </div>
     </Page>
 }

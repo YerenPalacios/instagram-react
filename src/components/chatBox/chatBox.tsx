@@ -1,7 +1,7 @@
 import './chatBox.scss';
 import infoIcon from './info.png'
-import { default as icon } from './../icons'
-import { useState, useEffect, useContext } from 'react';
+import { default as icon } from '../icons'
+import React, { useState, useEffect, useContext, FormEvent } from 'react';
 import api from '../../api.json'
 
 import { ApiErrorContext, AuthContext } from '../../context/datacontext';
@@ -17,10 +17,10 @@ const connectionStates = [
     'Uninstantiated',
 ];
 
-function PostMessage({ post_id }) {
+function PostMessage({ post_id }: {post_id: number}) {
     const { get } = useFetch()
     const dispatch = useDispatch();
-    const [postInfo, setPostInfo] = useState({})
+    const [postInfo, setPostInfo] = useState<Post>()
 
     useEffect(() => {
         get('post/' + post_id).then(data => setPostInfo(data))
@@ -33,30 +33,32 @@ function PostMessage({ post_id }) {
         })
     }
 
-    if (postInfo.images) {
-        console.log(postInfo.images[0].image)
-    }
-
     return <div className="post-message">
         <div className="user">
-            <div className="image"><img src={postInfo.user && getUserImage(postInfo.user)} alt="" /></div>
-            <Link to={"/" + postInfo.user?.username}>{postInfo.user?.username}</Link>
+            <div className="image"><img src={postInfo?.user && getUserImage(postInfo.user)} alt="" /></div>
+            <Link to={"/" + postInfo?.user?.username}>{postInfo?.user?.username}</Link>
         </div>
-        <div className='post-content' onClick={handleClick}><img src={postInfo.images && postInfo.images[0].image} alt="" /></div>
-        <div><b>{postInfo.user?.username}</b>&nbsp;&nbsp;{postInfo.text}</div>
+        <div className='post-content' onClick={handleClick}><img src={postInfo?.images && postInfo?.images[0].image} alt="" /></div>
+        <div><b>{postInfo?.user?.username}</b>&nbsp;&nbsp;{postInfo?.text}</div>
     </div>
 }
 
-export default function ChatBox({ room }) {
-    const [ws, setWs] = useState()
+type ChatRoom = {
+    id: number,
+    last_message: Message,
+    user: User
+}
+
+export default function ChatBox({ room }: {room: ChatRoom}) {
+    const [ws, setWs] = useState<WebSocket>()
     const [connectionStatus, setConnectionStatus] = useState(3)
-    const [messages, setMessages] = useState([])
+    const [messages, setMessages] = useState<Message[]>([])
     const items_div = document.getElementById('items')
     const { auth } = useContext(AuthContext);
     const { error, setError } = useContext(ApiErrorContext)
 
     useEffect(() => {
-        let ws = new WebSocket(api.ws + `chat2/?room_id=${room.id}&token=${auth.token}`)
+        let ws = new WebSocket(api.ws + `chat2/?room_id=${room.id}&token=${auth?.token}`)
         setWs(ws)
         return () => { setMessages([]); ws.close() }
     }, [room]);
@@ -90,9 +92,9 @@ export default function ChatBox({ room }) {
 
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        ws.send(JSON.stringify(
+        ws?.send(JSON.stringify(
             { action: 'add_message', text: e.target['message'].value }
         ))
         e.target['message'].value = ''
