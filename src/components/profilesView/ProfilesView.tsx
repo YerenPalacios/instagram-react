@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import './profilesView.scss'
 import { getUserImage, useFetch } from '../../helpers'
-import { AuthContext } from "../../context/datacontext"
+import { AuthContext, PageContext } from "../../context/datacontext"
 import icons from "../icons"
 import NotFound from "../notFound/notFound"
 import { SimplePost } from "../Post/simplePost/simplePost"
@@ -13,9 +13,10 @@ function ProfileBody() {
     const navigate = useNavigate()
     const { get, loading } = useFetch()
     const { auth } = useContext(AuthContext)
+    const { offset, setOffset, limit} = useContext(PageContext)
     const { username, tab } = useParams<{ username: string, tab: string }>()
-    
-    const [posts, setPosts] = useState([])
+
+    const [posts, setPosts] = useState<Post[]>([])
 
     function get_filter_for_tab(tab: string | undefined) {
         if (tab === 'saved') {
@@ -27,20 +28,39 @@ function ProfileBody() {
         }
     }
 
+    console.log(offset)
+
     useEffect(() => {
-        get('post/?' + get_filter_for_tab(tab)).then(data => setPosts(data.map((i: Post, k: number) => <SimplePost data={i} key={k} />)))
-    }, [tab]);
+        get('post/?' + get_filter_for_tab(tab) + '&offset=' + offset + '&limit=' + limit).then((data: Post[]) => {
+            setPosts(prev => {
+                let a = [...prev]
+                data.forEach(i => {
+                    if (!a.find(item => item.id == i.id)) {
+                        a.push(i)
+                    }
+                })
+                return a
+            })
+        })
+    }, [tab, offset]);
+
+
+    const changeTab = (path: string)=>{
+        setPosts([])
+        setOffset(0)
+        navigate(path)
+    }
 
     return (
         <div className="profile-body">
             <ul className="tablist">
                 {/* TODO: review tabs */}
-                <li className={!tab ? 'current' : ''} onClick={() => navigate(`/${username}`)}>{icons.posts}<p>Publicaciones</p></li>
-                <li className={tab === 'saved' ? 'current' : ''} onClick={() => navigate(`/${username}/saved`)}>{icons.save}<p>Guardado</p></li>
-                <li className={tab === 'tagged' ? 'current' : ''} onClick={() => navigate(`/${username}/tagged`)}>{icons.tagged}<p>Etiquetadas</p></li>
+                <li className={!tab ? 'current' : ''} onClick={() => changeTab(`/${username}`)}>{icons.posts}<p>Publicaciones</p></li>
+                <li className={tab === 'saved' ? 'current' : ''} onClick={() => changeTab(`/${username}/saved`)}>{icons.save}<p>Guardado</p></li>
+                <li className={tab === 'tagged' ? 'current' : ''} onClick={() => changeTab(`/${username}/tagged`)}>{icons.tagged}<p>Etiquetadas</p></li>
             </ul>
-            {loading ? <Loading /> : <div className="SimplePostContainer">{posts}</div>}
-
+            <div className="SimplePostContainer">{posts.map((post: Post) => <SimplePost data={post} key={post.id} />)}</div>
+            {loading && <Loading />}
         </div>
     )
 }
@@ -87,7 +107,7 @@ export default function ProfilesView() {
 
     if (notFound) return <NotFound />
     return (
-        <>
+        <div>
             <div className="profilesView">
                 <div className="user-image"><img src={user && getUserImage(user)} alt="" /></div>
                 <div className="profile-data">
@@ -118,6 +138,6 @@ export default function ProfilesView() {
                 </div>
             </div>
             <ProfileBody />
-        </>
+        </div>
     )
 }

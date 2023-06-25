@@ -4,5 +4,5 @@ import ProfilesView from "../components/profilesView/ProfilesView";
 
 
 export default function Profile() {
-    return (<Page><ProfilesView /></Page>)
+    return (<Page ><ProfilesView /></Page>)
 }

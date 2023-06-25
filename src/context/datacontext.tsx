@@ -3,6 +3,7 @@ import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LocalStorage } from "../services/LocalStorage.service";
 import React from 'react'
+import { PageDefault } from "../constants";
 
 const NO_AUTH_PATH = [
   '/login', '/password-reset', '/'
@@ -48,4 +49,26 @@ export const PostContext = createContext<PostContextProps>({ posts: [], setPosts
 export const PostProvider: React.FC = ({ children }) => {
   const [posts, setPosts] = useState<Post[]>([])
   return <PostContext.Provider value={{ posts, setPosts }}>{children}</PostContext.Provider>
+}
+
+type PageContextProps = {
+  limit: number,
+  offset: number,
+  setOffset: React.Dispatch<React.SetStateAction<number>>,
+  setLimit: React.Dispatch<React.SetStateAction<number>>,
+}
+
+const PageContextDefault = {
+  limit: 10,
+  offset: 0,
+  setOffset: () => { },
+  setLimit: () => { },
+}
+
+export const PageContext = createContext<PageContextProps>(PageContextDefault)
+
+export const PageProvider: React.FC = ({ children }) => {
+  const [limit, setLimit] = useState(PageContextDefault.limit)
+  const [offset, setOffset] = useState(PageContextDefault.offset)
+  return <PageContext.Provider value={{ limit, offset, setLimit, setOffset }}>{children}</PageContext.Provider>
 }

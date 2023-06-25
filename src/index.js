@@ -15,7 +15,7 @@ import View404 from './pages/404';
 import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector';
 import i18n from 'i18next'
-import { ApiErrorProvider, AuthProvider, PostProvider } from './context/datacontext';
+import { ApiErrorProvider, AuthProvider, PageProvider, PostProvider } from './context/datacontext';
 import { APIErrorModal } from './components/ApiErrorModal/ApiErrorModal';
 import Explore from './pages/explore';
 import ExplorePeople from './pages/explorePeople';
@@ -50,25 +50,28 @@ ReactDOM.render(
     <Provider store={store}>
       <AuthProvider>
         <ApiErrorProvider>
-        <PostProvider>
+          <PostProvider>
+            <PageProvider>
 
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/password-reset" element={<ResetPasswordForm />} />
-            <Route path="/" element={<Home />} />
-            <Route path="/:username" element={<Profile />} />
-            <Route path="/edit" element={<Edit />} />
-            <Route path="/:username/:tab" element={<Profile />} />
-            <Route path="/explore" element={<Explore />} />
-            <Route path="/explore/people" element={<ExplorePeople />} />
-            <Route path="/inbox" element={<Inbox />} />
-            <Route path="/inbox/:username" element={<Inbox />} />
-            <Route path="/accounts" element={<Inbox />} />
-            <Route path="*" element={<View404 />} />
-          </Routes>
-          <APIErrorModal></APIErrorModal>
-          <PostWindow></PostWindow>
-          <SharingPostWindow></SharingPostWindow>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/password-reset" element={<ResetPasswordForm />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/:username" element={<Profile />} />
+                <Route path="/edit" element={<Edit />} />
+                <Route path="/:username/:tab" element={<Profile />} />
+                <Route path="/explore" element={<Explore />} />
+                <Route path="/explore/people" element={<ExplorePeople />} />
+                <Route path="/inbox" element={<Inbox />} />
+                <Route path="/inbox/:username" element={<Inbox />} />
+                <Route path="/accounts" element={<Inbox />} />
+                <Route path="*" element={<View404 />} />
+              </Routes>
+              <APIErrorModal></APIErrorModal>
+              <PostWindow></PostWindow>
+              <SharingPostWindow></SharingPostWindow>
+              
+            </PageProvider>
           </PostProvider>
         </ApiErrorProvider>
       </AuthProvider>

@@ -5,26 +5,39 @@ import './pages.scss'
 import { useFetch } from '../helpers'
 import Page from '../components/page/page'
 import HomeSide from '../components/home/homeSide/HomeSide'
-import { PostContext } from '../context/datacontext'
+import { PageContext, PostContext } from '../context/datacontext'
+import Loading from '../components/Base/loading/loading'
 
 export default function Home() {
     const { get, loading } = useFetch()
     const { posts, setPosts } = useContext(PostContext)
+    const { offset, limit } = useContext(PageContext)
 
     useEffect(() => {
-        get('post/?priority=true').then(data =>
-            setPosts(data)
+        get(`post/?priority=true&offset=${offset}&limit=${limit}`).then((data: Post[]) =>
+            setPosts(prev => {
+                const uniquePosts = [...prev];
+
+                data.forEach(post => {
+                    const isPostPresent = uniquePosts.some(existingPost => existingPost.id === post.id);
+                    if (!isPostPresent) {
+                        uniquePosts.push(post);
+                    }
+                });
+
+                return uniquePosts;
+            })
         )
-    }, [])
+    }, [offset])
 
     return <Page>
         <div className="flexContainer">
             <div className="side_container">
                 <StoriesBar />
-                {loading && <p>cargando...</p>}
                 {posts?.map((post: Post,) => (
                     <Post key={post.id} data={post} />
                 ))}
+                <Loading></Loading>
             </div>
             <HomeSide />
         </div>
