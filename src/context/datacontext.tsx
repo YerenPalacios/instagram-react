@@ -1,9 +1,7 @@
-import { ReactNode, useEffect } from "react";
+import React, { useEffect } from "react";
 import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LocalStorage } from "../services/LocalStorage.service";
-import React from 'react'
-import { PageDefault } from "../constants";
 
 const NO_AUTH_PATH = [
   '/login', '/password-reset', '/'
