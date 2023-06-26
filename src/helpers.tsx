@@ -30,36 +30,36 @@ export const useFetch = (auto_errors = true) => {
         };
     }, []);
 
-    const runFetch = (path: string, options: RequestInit = {}): Promise<any> => {
-
-        return new Promise((resolve, reject) => {
+    const runFetch = async (path: string, options: RequestInit = {}): Promise<any> => {
+        try {
             if (!auth && !NO_AUTH_PATHS.includes(path)) {
                 navigate('/login')
-                reject(new Error('nada'))
-            } else {
-                resolve(
-                    fetch(
-                        API_URL + path, { signal: controller?.signal, ...options },
-                    ).then(res => {
-
-                        if (res.status >= 500) { throw setError('¡Ha ocurrido un error!') }
-                        if (res.status >= 400 && auto_errors)
-                            res.json().then((data => {
-                                throw setError(data[Object.keys(data)[0]])
-                            }))
-                        else {
-                            if (options.method === 'DELETE') {
-                                return null
-                            }
-                            return res.json()
-                        }
-                    }).catch(e => {
-                        // TODO: fix when server is not active
-                        throw setError('¡Ha ocurrido un error!')
-                    }).finally(() => setLoading(false))
-                )
+                throw new Error('no autorizado')
             }
-        })
+            const response = await fetch(API_URL + path, { signal: controller?.signal, ...options })
+            if (response.status >= 500) throw new Error('¡Ha ocurrido un error!')
+
+            if (response.status >= 400 && auto_errors) {
+                response.json().then((data => {
+                    throw new Error(data[Object.keys(data)[0]])
+                }))
+            }
+
+            if (response.status >= 400) throw new Error('¡Ha ocurrido un error 400!')
+
+            if (options.method === 'DELETE') return null
+            return response.json()
+        } catch (error) {
+            if (error instanceof Error){
+                const message = error.message
+                setError(message) 
+            } else {
+                setError('Error desconocido')
+            }  
+        } finally {
+            setLoading(false)
+        }
+        return []  
     }
 
     const login = (body: Object) => {
