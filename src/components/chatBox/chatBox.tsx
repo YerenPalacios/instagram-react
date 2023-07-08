@@ -101,7 +101,7 @@ export default function ChatBox({ room }: { room: ChatRoom }) {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const message = e.target['message']
+        const message = (e.target as HTMLFormElement)['message']
         ws?.send(JSON.stringify(
             { action: 'add_message', text: message.value }
         ))

@@ -9,12 +9,14 @@ export function ProfileForm() {
     const authContext = useContext(AuthContext)
     const { get, put } = useFetch()
     const [user, setUser] = useState<User>()
+    const [currentImage, setCurrentImage] = useState<string>()
 
     const [updateData, setUpdateData] = useState({
         username: '',
         description: '',
         email: '',
-        name: ''
+        name: '',
+        image: {}
     })
 
     useEffect(() => {
@@ -25,7 +27,8 @@ export function ProfileForm() {
                     name: data.name,
                     username: data.username,
                     email: data.email,
-                    description: data.description
+                    description: data.description,
+                    image: data.image
                 })
             })
     }, [authContext])
@@ -38,7 +41,13 @@ export function ProfileForm() {
     }
 
     const handleSubmitData = () => {
-        put("user/" + authContext?.auth?.user.username, updateData)
+        const formData = new FormData();
+        for (let key in updateData) {
+            if (updateData.hasOwnProperty(key)) {
+              formData.append(key, updateData[key]);
+            }
+        }
+        put("user/" + authContext?.auth?.user.username, formData)
             .then((data: User) => {
                 if (UpdateUserSesion(data)) {
                     let token = authContext.auth?.token ?? ''
@@ -48,13 +57,23 @@ export function ProfileForm() {
             })
     }
 
+    const handleFile = (e: ChangeEvent<HTMLInputElement>)=>{
+        const file  = e.target.files
+        if (file){
+            const url = URL.createObjectURL(file[0])
+            setCurrentImage(url)
+            setUpdateData(prev=>({...prev, image: file[0]}))
+        }
+    }
+
     return (
         <div className="profile-form">
             <div className="profile">
-                <img src={user && getUserImage(user)} alt="" />
+                <img src={currentImage ?? (user && getUserImage(user))} alt="" />
                 <div>
                     <p>{user?.username}</p>
-                    <p className="change-image">Cambiar foto del perfil</p>
+                    <label htmlFor="image-file" className="change-image">Cambiar foto de perfil</label>
+                    <input onChange={handleFile} hidden id="image-file" type="file" className="change-image"></input>
                 </div>
             </div>
             <div className="input">
