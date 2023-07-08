@@ -9,7 +9,7 @@ export function UpdateUserSesion(user: User) {
     let authData = localStorage.getItem('auth')
     if (authData) {
         let authDataObj = JSON.parse(authData)
-        user.image = user.image?.replace(API_URL, '')
+        user.image = user.image?.replace(API_URL, '') //why replace?
         authDataObj.user = user
         localStorage.setItem('auth', JSON.stringify(authDataObj))
         return true
@@ -19,51 +19,53 @@ export function UpdateUserSesion(user: User) {
 
 export const useFetch = (auto_errors = true) => {
     const navigate = useNavigate()
-    const [loading, setLoading] = useState(false);
-    const controller = new AbortController()
+
     const { auth } = useContext(AuthContext)
     const { error, setError } = useContext(ApiErrorContext)
+    const [loading, setLoading] = useState(false);
+
+    const controller = new AbortController()
 
     useEffect(() => {
-        return () => {
-            if (controller) controller.abort()
-        };
-    }, []);
+        return () => controller && controller.abort()
+    }, [])
 
-    const runFetch = async (path: string, options: RequestInit = {}, errorCallback=setError): Promise<any> => {
+    const validateResponse = (response: Response) => {
+        if (response.status >= 500) throw new Error('¡Ha ocurrido un error!')
+
+        if (response.status >= 400 && auto_errors) {
+            response.json().then((data => {
+                throw new Error(data[Object.keys(data)[0]])
+            }))
+        }
+
+        if (response.status >= 400) throw new Error('¡Ha ocurrido un error 400!')
+    }
+
+    const runFetch = async (path: string, options: RequestInit = {}, errorCallback = setError): Promise<any> => {
+        setLoading(true);
         try {
             if (!auth && !NO_AUTH_PATHS.includes(path)) {
                 navigate('/login')
                 throw new Error('no autorizado')
             }
             const response = await fetch(API_URL + path, { signal: controller?.signal, ...options })
-            if (response.status >= 500) throw new Error('¡Ha ocurrido un error!')
+            validateResponse(response)
 
-            if (response.status >= 400 && auto_errors) {
-                response.json().then((data => {
-                    throw new Error(data[Object.keys(data)[0]])
-                }))
-            }
-
-            if (response.status >= 400) throw new Error('¡Ha ocurrido un error 400!')
-
-            if (options.method === 'DELETE') return null
+            if (options.method === 'DELETE') return null // this shold not return null when delete
             return response.json()
         } catch (error) {
-            if (error instanceof Error){
+            if (error instanceof Error) {
                 const message = error.message
-                errorCallback(message) 
-            } else {
-                errorCallback('Error desconocido')
-            }  
+                errorCallback(message)
+            } else errorCallback('Error desconocido')
         } finally {
             setLoading(false)
         }
-        return []  
+        return []
     }
 
     const login = (body: Object) => {
-        setLoading(true);
         const options = {
             method: 'POST',
             headers: {
@@ -76,7 +78,6 @@ export const useFetch = (auto_errors = true) => {
     }
 
     const sign = (body: Object) => {
-        setLoading(true);
         const options = {
             method: 'POST',
             headers: {
@@ -88,8 +89,8 @@ export const useFetch = (auto_errors = true) => {
         return runFetch(SIGN_PATH, options)
     }
 
-    const get = (path: string, errorCallback?: (message?:string)=>void) => {
-        setLoading(true);
+    const get = (path: string, errorCallback?: (message?: string) => void) => {
+
         const options = {
             method: 'GET',
             headers: {
@@ -100,7 +101,7 @@ export const useFetch = (auto_errors = true) => {
     }
 
     const sendRecoveryEmail = (body: Object) => {
-        setLoading(true);
+
         const options = {
             method: 'POST',
             headers: {
@@ -113,7 +114,6 @@ export const useFetch = (auto_errors = true) => {
     }
 
     const post = (path: string, body = {}) => {
-        setLoading(true);
         const options = {
             method: 'POST',
             headers: {
@@ -127,7 +127,6 @@ export const useFetch = (auto_errors = true) => {
     }
 
     const put = (path: string, body = {}) => {
-        setLoading(true);
         const options = {
             method: 'PUT',
             headers: {
@@ -141,7 +140,6 @@ export const useFetch = (auto_errors = true) => {
     }
 
     const remove = (path: string, body = {}) => {
-        setLoading(true);
         const options = {
             method: 'DELETE',
             headers: {
