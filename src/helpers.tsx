@@ -30,7 +30,7 @@ export const useFetch = (auto_errors = true) => {
         };
     }, []);
 
-    const runFetch = async (path: string, options: RequestInit = {}): Promise<any> => {
+    const runFetch = async (path: string, options: RequestInit = {}, errorCallback=setError): Promise<any> => {
         try {
             if (!auth && !NO_AUTH_PATHS.includes(path)) {
                 navigate('/login')
@@ -52,9 +52,9 @@ export const useFetch = (auto_errors = true) => {
         } catch (error) {
             if (error instanceof Error){
                 const message = error.message
-                setError(message) 
+                errorCallback(message) 
             } else {
-                setError('Error desconocido')
+                errorCallback('Error desconocido')
             }  
         } finally {
             setLoading(false)
@@ -88,7 +88,7 @@ export const useFetch = (auto_errors = true) => {
         return runFetch(SIGN_PATH, options)
     }
 
-    const get = (path: string) => {
+    const get = (path: string, errorCallback?: (message?:string)=>void) => {
         setLoading(true);
         const options = {
             method: 'GET',
@@ -96,7 +96,7 @@ export const useFetch = (auto_errors = true) => {
                 'Authorization': auth ? 'Token ' + auth.token : ''
             }
         }
-        return runFetch(path, options)
+        return runFetch(path, options, errorCallback)
     }
 
     const sendRecoveryEmail = (body: Object) => {

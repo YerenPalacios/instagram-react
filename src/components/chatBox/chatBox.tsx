@@ -8,6 +8,7 @@ import { ApiErrorContext, AuthContext } from '../../context/datacontext';
 import { getUserImage, useFetch } from '../../helpers';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Loading from '../Base/loading/loading';
 
 const connectionStates = [
     'Connecting',
@@ -18,13 +19,18 @@ const connectionStates = [
 ];
 
 function PostMessage({ post_id }: { post_id: number }) {
-    const { get } = useFetch()
+    const { get, loading } = useFetch()
     const dispatch = useDispatch();
     const [postInfo, setPostInfo] = useState<Post>()
-    const [image, setImage] = useState(postInfo?.files ? postInfo?.files[0].file : '')
+    const [image, setImage] = useState(postInfo?.files ? postInfo?.files && postInfo?.files[0].file : '')
+    const [isValidPost, setIsValidPost] = useState(true)
+
+    const invalidPost = ()=>{
+        setIsValidPost(false)
+    }
 
     useEffect(() => {
-        get('post/' + post_id).then(data => setPostInfo(data))
+        get('post/' + post_id, invalidPost).then(data => setPostInfo(data))
     }, []);
 
     const handleClick = () => {
@@ -34,10 +40,19 @@ function PostMessage({ post_id }: { post_id: number }) {
         })
     }
 
-    useEffect(()=>{
-        setImage(postInfo?.files[0].thumbnail ?? '')
+    useEffect(() => {
+        if (postInfo) {
+            if (postInfo.files) {
+                if (postInfo.files[0].thumbnail) setImage(postInfo?.files[0].thumbnail)
+                else setImage(postInfo?.files[0].file)
+            }
+        }
+
     }, [postInfo])
 
+    if (!isValidPost) return <div className="post-message invalid-message">Couldn´t load this message</div>
+
+    if (loading) return <div className="post-message invalid-message"><Loading></Loading></div>
     return <div className="post-message">
         <div className="user">
             <div className="image"><img src={postInfo?.user && getUserImage(postInfo.user)} alt="" /></div>

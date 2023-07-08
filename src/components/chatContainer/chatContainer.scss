@@ -1,46 +1,99 @@
-$border: 1px solid #ccc;
-
 .chat-container {
-    padding: 10px;
     box-sizing: border-box;
-    height: calc(100vh - 58px);
-    display: grid;
-    max-width: 935px;
-    margin: 0 auto;
+    display: flex;
+    width: 100%;
 
-    .chat {
+    .chat-list {
+        position: relative;
         background-color: #fff;
-        display: flex;
-        border: $border;
-        overflow: hidden;
         border-radius: 5px;
+        width: 350px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #e6e6e6;
 
-        .person{
-            display:flex;
+        .chat-list-head {
+            width: 100%;
+            height: auto;
+            padding: 0 20px;
+
+            div {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                p,
+                h2 {
+                    margin: 0;
+                }
+                h2{
+                    font-size: 17px;
+                }
+
+                a {
+                    color: #777;
+                    width: auto;
+                    padding: 0;
+                    text-decoration: none;
+                }
+            }
+        }
+
+        .chat-items {
+            flex-grow: 1;
+            overflow: auto;
+            width: 100%;
+        }
+        .current-person{
+            background-color: #f7f7f7;
+        }
+        .person {
+            display: flex;
             align-items: center;
-            color:#262626;
+            color: #262626;
             font-size: 14px;
-            padding:10px;
-            cursor:pointer;
+            padding: 10px 20px;
+            cursor: pointer;
 
-            &:hover{
-                background-color: #f7f7f7;
+            &:hover {
+                background-color: #fafafa;
             }
 
-            p{
+            p {
                 margin: 5px 0;
-                color:#8e8e8e
+                color: #8e8e8e
             }
-            p:first-child{
-                color:inherit
+
+            p:first-child {
+                color: inherit
             }
-            
-            img{
-                width:52px;
+
+            img {
+                width: 52px;
                 border-radius: 50%;
-                border:1px solid #ccc;
+                border: 1px solid #ccc;
                 margin-right: 15px;
             }
+        }
+    }
+
+    .chat{
+        flex-grow: 1;
+    }
+    .default-page{
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        h2,p{
+            margin: 0;
+        }
+        h2{
+            font-weight: 400;
+            margin-bottom: 5px;
         }
     }
 }

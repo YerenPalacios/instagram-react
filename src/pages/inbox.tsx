@@ -5,5 +5,5 @@ import Page from '../components/page/page'
 
 
 export default function Inbox() {
-    return (<Page><ChatContainer /></Page>)
+    return <Page padding={false}><ChatContainer /></Page>
 }

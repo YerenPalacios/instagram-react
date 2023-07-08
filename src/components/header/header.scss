@@ -10,7 +10,7 @@ header {
     align-items: center;
     justify-items: center;
     grid-template-columns: repeat(3, auto);
-    padding: 10px 25px;
+    padding: 10px 15px;
     grid-gap: 15px;
     top: 0;
     z-index: 100;
@@ -22,6 +22,7 @@ header {
 
     .logo {
         padding: 30px 0;
+        margin-left: 10px;
     }
 
     input {
@@ -51,12 +52,15 @@ header {
 
     button,
     a {
+        &:hover{
+            background-color: #f7f7f7;
+        }
         background-color: transparent;
         border: none;
         display: flex;
         align-items: center;
         cursor: pointer;
-        padding: 0 5px;
+        padding: 5px;
         font-size: 15px;
     }
     .current{
@@ -124,7 +128,8 @@ header .menu {
 header a,
 header button,
 header .user-menu {
-    padding: 15px 0px;
+    border-radius: 5px;
+    padding: 15px ;
     padding-right: 60px;
     margin: 0;
     width: 100%;
