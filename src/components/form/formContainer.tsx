@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react'
+import React, { ChangeEvent, FormEvent } from 'react'
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './loginForm.scss'
@@ -10,7 +10,7 @@ import { useRef } from "react";
 function RegForm() {
     const navigate = useNavigate()
     const { setAuth } = useContext(AuthContext)
-    const { sign } = useFetch()
+    const { sign, get } = useFetch()
 
 
     const email_or_tel = useRef<HTMLInputElement | null>(null)
@@ -20,18 +20,33 @@ function RegForm() {
 
     const handleSign = (e: FormEvent) => {
         e.preventDefault()
-        let email: string = email_or_tel.current?.value.includes('@') ? email_or_tel.current?.value: ''
-        let phone: string | undefined = !email_or_tel.current?.value.includes('@') ? email_or_tel.current?.value: '';
+        let email: string = email_or_tel.current?.value.includes('@') ? email_or_tel.current?.value : ''
+        let phone: string | undefined = !email_or_tel.current?.value.includes('@') ? email_or_tel.current?.value : '';
         let name: string | undefined = nameInput.current?.value
         let username: string | undefined = usernameInput.current?.value
         let password: string | undefined = passInput.current?.value
 
         if (email?.length || phone?.length && name?.length && password?.length) {
             sign({ ...email ? { email } : { phone }, name, username, password })
-            .then((data: Auth) => {
-                LocalStorage.set('auth', data)
-                setAuth(data)
-                navigate('/')
+                .then((data: Auth) => {
+                    if (data.token) {
+                        LocalStorage.set('auth', data)
+                        setAuth(data)
+                        navigate('/')
+                    }
+                })
+        }
+    }
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value
+        if (value.length) {
+            get('user-exists/?value=' + value).then(data => {
+                if (data.exists) {
+                    e.target.classList.add('invalid-input')
+                } else {
+                    e.target.classList.remove('invalid-input')
+                }
             })
         }
     }
@@ -40,9 +55,9 @@ function RegForm() {
         <form onSubmit={handleSign}>
             <p className="desc">Regístrate para ver fotos y videos de tus amigos.</p>
             <div className="inputs">
-                <input ref={email_or_tel} type="text" placeholder="Número de celular o correo electrónico" />
+                <input onInput={handleChange} ref={email_or_tel} type="text" placeholder="Número de celular o correo electrónico" />
                 <input ref={nameInput} type="text" placeholder="Nombre completo" />
-                <input ref={usernameInput} type="text" placeholder="Nombre de usuairio" />
+                <input onInput={handleChange} ref={usernameInput} type="text" placeholder="Nombre de usuairio" />
                 <input ref={passInput} type="text" placeholder="Contraseña" />
                 <button>Registrarse</button>
             </div>
@@ -52,7 +67,7 @@ function RegForm() {
 
 function LoginForm() {
     const navigate = useNavigate()
-    const { login } = useFetch()
+    const { login, get } = useFetch()
     const { setAuth } = useContext(AuthContext)
     const emailInput = useRef<HTMLInputElement | null>(null)
     const passInput = useRef<HTMLInputElement | null>(null)
@@ -73,11 +88,24 @@ function LoginForm() {
         }
     }
 
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value
+        if (value.length) {
+            get('user-exists/?value=' + value).then(data => {
+                if (!data.exists) {
+                    e.target.classList.add('invalid-input')
+                } else {
+                    e.target.classList.remove('invalid-input')
+                }
+            })
+        }
+    }
+
     return (
         <form>
             <div className="inputs">
                 {/* TODO: add label in inputs */}
-                <input type="text" name="email" ref={emailInput} placeholder="Teléfono, usuario o correo electrónico" />
+                <input onInput={handleChange} type="text" name="email" ref={emailInput} placeholder="Teléfono, usuario o correo electrónico" />
                 <input type="password" name="password" ref={passInput} placeholder="Contraseña" />
                 <button onClick={handleLogin}>Iniciar sesión</button>
                 <div className="or">
@@ -86,7 +114,6 @@ function LoginForm() {
                     <span></span>
                 </div>
                 <a className="link2" href="/password-reset">¿Olvidaste tu contraseña?</a>
-
             </div>
         </form>
     )

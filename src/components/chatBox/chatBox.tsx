@@ -139,7 +139,7 @@ export default function ChatBox({ room }: { room: ChatRoom }) {
                         {messages.map((v, i) => {
                             let cl = 'item other'
                             if (room.user.id !== v.user) cl = 'item'
-                            if (v.is_post) return <div className={cl}><PostMessage key={i} post_id={parseInt(v.content)} /></div>
+                            if (v.is_post) return <div key={i} className={cl}><PostMessage post_id={parseInt(v.content)} /></div>
                             return (<div key={i} className={cl}>{v.content}</div>)
                         })}
 

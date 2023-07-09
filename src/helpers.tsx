@@ -30,13 +30,12 @@ export const useFetch = (auto_errors = true) => {
         return () => controller && controller.abort()
     }, [])
 
-    const validateResponse = (response: Response) => {
+    const validateResponse = async (response: Response) => {
         if (response.status >= 500) throw new Error('¡Ha ocurrido un error!')
 
         if (response.status >= 400 && auto_errors) {
-            response.json().then((data => {
-                throw new Error(data[Object.keys(data)[0]])
-            }))
+            const error = await response.json()
+            throw new Error(error[Object.keys(error)[0]])
         }
 
         if (response.status >= 400) throw new Error('¡Ha ocurrido un error 400!')
@@ -45,12 +44,12 @@ export const useFetch = (auto_errors = true) => {
     const runFetch = async (path: string, options: RequestInit = {}, errorCallback = setError): Promise<any> => {
         setLoading(true);
         try {
-            if (!auth && !NO_AUTH_PATHS.includes(path)) {
+            if (!auth && !NO_AUTH_PATHS.includes(path.split('?')[0])) {
                 navigate('/login')
                 throw new Error('no autorizado')
             }
             const response = await fetch(API_URL + path, { signal: controller?.signal, ...options })
-            validateResponse(response)
+            await validateResponse(response)
 
             if (options.method === 'DELETE') return null // this shold not return null when delete
             return response.json()
@@ -89,13 +88,17 @@ export const useFetch = (auto_errors = true) => {
         return runFetch(SIGN_PATH, options)
     }
 
-    const get = (path: string, errorCallback?: (message?: string) => void) => {
+    const get = (path: string, errorCallback?: (message?: string) => void, with_auth=true) => {
+        let headers = {}
+        if (with_auth){
+            headers = {
+                'Authorization': auth ? 'Token ' + auth.token : ''
+            }
+        }
 
         const options = {
             method: 'GET',
-            headers: {
-                'Authorization': auth ? 'Token ' + auth.token : ''
-            }
+            headers
         }
         return runFetch(path, options, errorCallback)
     }

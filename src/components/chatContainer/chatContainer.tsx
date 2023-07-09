@@ -63,7 +63,7 @@ export default function ChatContainer() {
                             className += " current-person"
                         }
 
-                        return <div key={k} className={className} onClick={() => openChat(i)}>
+                        return <div key={k} data-key={i.id} className={className} onClick={() => openChat(i)}>
                             <img src={getUserImage(i.user)} alt="" />
                             <div>
                                 <p>{i.user.name}</p>
