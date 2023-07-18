@@ -6,9 +6,9 @@ type ErrorObj = {
     statusText: string
 }
 
-export default function Error({error}: {error: ErrorObj}){
+export default function Error({ error }: { error: ErrorObj }) {
     const [show, setShow] = useState(true)
-    const [styles,setStyles] = useState({transform: 'rotateX(90deg)'})
+    const [styles, setStyles] = useState({ transform: 'rotateX(90deg)' })
 
     useEffect(() => {
         setStyles({
@@ -18,20 +18,20 @@ export default function Error({error}: {error: ErrorObj}){
             setStyles({
                 transform: 'rotateX(90deg)'
             })
-        },4000)
+        }, 4000)
         setTimeout(() => {
             setShow(false)
-        },5000)
-    },[])
+        }, 5000)
+    }, [])
 
-    if (show){
-        return(
+    if (show) {
+        return (
             <div style={styles} className="error">
                 <h1>Error {error.status}</h1>
                 <p>{error.statusText}</p>
-            </div>            
+            </div>
         )
     }
     return null
-    
+
 }

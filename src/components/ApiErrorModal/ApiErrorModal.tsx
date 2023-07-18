@@ -3,6 +3,12 @@ import React from 'react'
 import { useEffect, useContext } from 'react';
 import { ApiErrorContext } from '../../context/datacontext';
 
+const NotificationColors = {
+  'error': '#c11',
+  'success': '#1c1'
+}
+
+
 export function APIErrorModal() {
   const modalDuration: number = 5
   const errorContext = useContext(ApiErrorContext)
@@ -11,10 +17,18 @@ export function APIErrorModal() {
     if (errorContext.error)
       setTimeout(() => {
         errorContext.setError("")
-      }, modalDuration * 1000);
+      }, modalDuration * 1200);
   }, [errorContext])
 
-  return (
-    errorContext.error ? <div style={{ animationDuration: modalDuration + 's' }} className='ApiErrorModal'>{errorContext.error}</div> : null
-  )
+  const close = ()=>{
+    errorContext.setError("")
+  }
+
+  if (!errorContext.error) return null
+  console.log(NotificationColors[errorContext.type])
+  return <div style={{ animationDuration: modalDuration + 's', color: NotificationColors[errorContext.type]}} className='ApiErrorModal'>
+    <div onClick={close}>x</div>
+    <span style={{backgroundColor: NotificationColors[errorContext.type]}}></span>
+    {errorContext.error}
+  </div>
 }

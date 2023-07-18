@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useContext, ChangeEvent } from "react"
 import api from '../../api.json'
-import { AuthContext } from "../../context/datacontext"
+import { ApiErrorContext, AuthContext } from "../../context/datacontext"
 import { UpdateUserSesion, getUserImage, useFetch } from '../../helpers'
 import './profileForm.scss'
 
 
 export function ProfileForm() {
     const authContext = useContext(AuthContext)
-    const { get, put } = useFetch()
-    const [user, setUser] = useState<User>()
+    const { get, updateUser } = useFetch()
     const [currentImage, setCurrentImage] = useState<string>()
+    const { error, setError } = useContext(ApiErrorContext)
 
     const [updateData, setUpdateData] = useState({
         username: '',
@@ -22,7 +22,6 @@ export function ProfileForm() {
     useEffect(() => {
         get("user/" + authContext?.auth?.user.username)
             .then(data => {
-                setUser(data)
                 setUpdateData({
                     name: data.name,
                     username: data.username,
@@ -44,34 +43,38 @@ export function ProfileForm() {
         const formData = new FormData();
         for (let key in updateData) {
             if (updateData.hasOwnProperty(key)) {
-              formData.append(key, updateData[key]);
+                if (updateData[key] != authContext.auth?.user[key]) {
+                    formData.append(key, updateData[key]);
+                }
+
             }
         }
-        put("user/" + authContext?.auth?.user.username, formData)
+
+
+        updateUser(formData)
             .then((data: User) => {
-                if (UpdateUserSesion(data)) {
-                    let token = authContext.auth?.token ?? ''
-                    authContext.setAuth({ token, user: data })
-                    // setAuth(getUserSesion())
+                if (JSON.stringify(data) !== '[]'){
+                    authContext.saveAuth(data)
+                    setError('User updated', 'success')
                 }
             })
     }
 
-    const handleFile = (e: ChangeEvent<HTMLInputElement>)=>{
-        const file  = e.target.files
-        if (file){
+    const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files
+        if (file) {
             const url = URL.createObjectURL(file[0])
             setCurrentImage(url)
-            setUpdateData(prev=>({...prev, image: file[0]}))
+            setUpdateData(prev => ({ ...prev, image: file[0] }))
         }
     }
 
     return (
         <div className="profile-form">
             <div className="profile">
-                <img src={currentImage ?? (user && getUserImage(user))} alt="" />
+                <img src={currentImage ?? (authContext.auth && authContext.auth.user && getUserImage(authContext.auth.user))} alt="" />
                 <div>
-                    <p>{user?.username}</p>
+                    <p>{authContext?.auth?.user?.username}</p>
                     <label htmlFor="image-file" className="change-image">Cambiar foto de perfil</label>
                     <input onChange={handleFile} hidden id="image-file" type="file" className="change-image"></input>
                 </div>

@@ -155,7 +155,19 @@ export const useFetch = (auto_errors = true) => {
         return runFetch(path, options)
     }
 
-    return { get, post, put, remove, login, sign, error, loading, setLoading, sendRecoveryEmail };
+    const updateUser = (data: any)=>{
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Token ' + auth?.token,
+            },
+            body: data
+        }
+
+        return runFetch('user/' + auth?.user.username, options)
+    }
+
+    return { get, post, put, remove, login, sign, error, loading, setLoading, sendRecoveryEmail, updateUser };
 }
 
 export function getUserImage(user: User) {

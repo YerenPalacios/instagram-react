@@ -9,31 +9,47 @@ const NO_AUTH_PATH = [
 
 type AuthContextProps = {
   auth: Auth | undefined;
-  setAuth: (value: Auth) => void
+  setAuth: (value: Auth) => void,
+  saveAuth: (user: User) => void
 };
 
-export const AuthContext = createContext<AuthContextProps>({ auth: undefined, setAuth: () => { } })
+export const AuthContext = createContext<AuthContextProps>({ auth: undefined, setAuth: () => { }, saveAuth: () => { } })
 
 export const AuthProvider: React.FC = ({ children }) => {
   const navigate = useNavigate()
   const [auth, setAuth] = useState(LocalStorage.get('auth'))
   useEffect(() => {
     !auth && !NO_AUTH_PATH.includes(window.location.pathname) && navigate('/login')
-  }, [])
+  }, [auth])
 
-  return <AuthContext.Provider value={{ auth, setAuth, }}>{children}</AuthContext.Provider>
+  const saveAuth = (user: User) => {
+    if (auth) {
+      const newAuth = { ...auth, user: user }
+      LocalStorage.set('auth', newAuth)
+      setAuth(newAuth)
+    }
+
+  }
+
+  return <AuthContext.Provider value={{ auth, setAuth, saveAuth }}>{children}</AuthContext.Provider>
 }
 
 type ErrorContextProps = {
   error: string,
-  setError: (value: string) => void
+  setError: (value: string, type?: string) => void,
+  type: string
 };
 
-export const ApiErrorContext = createContext<ErrorContextProps>({ error: '', setError: () => { } })
+export const ApiErrorContext = createContext<ErrorContextProps>({ error: '', setError: () => { }, type: 'error' })
 
 export const ApiErrorProvider: React.FC = ({ children }) => {
-  const [error, setError] = useState("")
-  return <ApiErrorContext.Provider value={{ error, setError }}>{children}</ApiErrorContext.Provider>
+  const [error, setErrorState] = useState("")
+  const [type, setType] = useState('error')
+  const setError = (data: any, type = 'error') => {
+    setType(type)
+    setErrorState(data)
+  }
+  return <ApiErrorContext.Provider value={{ error, setError, type }}>{children}</ApiErrorContext.Provider>
 }
 
 

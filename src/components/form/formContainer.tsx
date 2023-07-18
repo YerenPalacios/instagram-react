@@ -78,7 +78,7 @@ function LoginForm() {
         e.preventDefault()
         if (email.length > 0 && password.length > 0) {
             login({ email, password }).then((data: Auth) => {
-                if (data) {
+                if (data && JSON.stringify(data) !== "[]") {
                     LocalStorage.set('auth', data)
                     setAuth(data)
                     navigate('/')
