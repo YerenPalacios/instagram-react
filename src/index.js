@@ -18,7 +18,7 @@ import { ApiErrorProvider, AuthProvider, PageProvider, PostProvider } from './co
 import { APIErrorModal } from './components/ApiErrorModal/ApiErrorModal';
 import Explore from './pages/explore';
 import ExplorePeople from './pages/explorePeople';
-import PostWindow, { SharingPostWindow } from './components/Base/PostWindow/postWindow';
+import PostWindow, { SharingPostWindow, LoginWindow } from './components/Base/PostWindow/postWindow';
 import { Provider } from 'react-redux';
 import store from './context/store';
 import ResetPasswordForm from './pages/password-reset';
@@ -69,7 +69,8 @@ ReactDOM.render(
               <APIErrorModal></APIErrorModal>
               <PostWindow></PostWindow>
               <SharingPostWindow></SharingPostWindow>
-              
+              <LoginWindow></LoginWindow>
+                           
             </PageProvider>
           </PostProvider>
         </ApiErrorProvider>

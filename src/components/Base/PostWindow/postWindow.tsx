@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Post from '../../Post/post';
 import PostShare from '../../Post/post-share/post-share';
+import { LoginForm } from '../../form/loginForm';
 
 export default function PostWindow() {
     const [hidden, setHidden] = useState(true);
@@ -48,6 +49,30 @@ export function SharingPostWindow() {
 
     return <div className="post-window">
         <PostShare data={sharing_post}></PostShare>
+        <div onClick={()=>{setHidden(true); cleanPost()}} className="hidden-div"></div>
+    </div>
+}
+
+export function LoginWindow() {
+    const [hidden, setHidden] = useState(true);
+    const { login } = useSelector((state: {login: Post}) => state);
+
+    const dispatch = useDispatch();
+    function cleanPost() {
+        dispatch({
+            type: "CLEAN_LOGIN"
+        })
+    }
+
+    useEffect(() => {
+        setHidden(false)
+    }, [login]);
+
+    if (!login) { return null }
+    if (hidden) return null
+
+    return <div className="post-window">
+        <LoginForm></LoginForm>
         <div onClick={()=>{setHidden(true); cleanPost()}} className="hidden-div"></div>
     </div>
 }

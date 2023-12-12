@@ -8,6 +8,7 @@ import { AuthContext } from '../../context/datacontext';
 import { getUserImage } from '../../helpers';
 import Search from '../search/search';
 import Notifications from './notifications/notifications';
+import { useDispatch } from 'react-redux';
 
 function useComponentVisible(initialIsVisible: boolean) {
     const [isVisible, setIsComponentVisible] = useState<Boolean>(initialIsVisible);
@@ -40,10 +41,18 @@ function UserMenu() {
     const { auth } = useContext(AuthContext)
     const navigate = useNavigate()
     const { ref, isVisible } = useComponentVisible(false);
+    const dispatch = useDispatch();
 
     const logout = () => {
         localStorage.removeItem('auth')
         navigate('/login')
+    }
+
+    const showLoginForm = ()=>{
+        dispatch({
+            type: "SHOW_LOGIN_FORM",
+            payload: {}
+          });
     }
 
     if (auth)
@@ -58,7 +67,7 @@ function UserMenu() {
                         <Link to={"/" + auth.user.username}>{ico.profile} Perfil</Link>
                         <Link to={`/${auth.user.username}/saved`}>{ico.save} Guardado</Link>
                         <Link to={"/edit"}>{ico.settings} Configuración</Link>
-                        <Link to="">{ico.change} Cambiar de cuenta</Link>
+                        <button onClick={showLoginForm}>{ico.change} Cambiar de cuenta</button>
                         <p onClick={logout} >Salir</p>
                     </div>
                 )}

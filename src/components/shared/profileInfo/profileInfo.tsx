@@ -13,7 +13,6 @@ export function ProfileInfo({ data, style }: {data: User, style?: string}) {
     const handleFollow = () => {
         if (loading) return
         let body = { "following": data.id }
-        debugger
         if (!following)
             post('follow/', body).then(() => {
                 setFollowing(true)

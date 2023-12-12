@@ -29,9 +29,21 @@ const sharingPostsReducer = (state = initialState.current_post, action:PostReduc
     }
 };
 
+const loginReducer = (state = initialState.current_post, action:PostReducerAction) => {
+    switch (action.type) {
+        case 'SHOW_LOGIN_FORM':
+            return true
+        case 'CLEAN_LOGIN':
+            return null;
+        default:
+            return state;
+    }
+};
+
 const reducer = combineReducers({
     current_post: postsReducer,
     sharing_post: sharingPostsReducer,
+    login: loginReducer
 });
 
 // Crea el store de Redux utilizando el reducer

@@ -117,7 +117,7 @@ header .menu {
     box-shadow: 0 -1px 5px 1px rgb(0 0 0 / 10%);
     font-size: 14px;
     padding: 5px 0;
-
+    z-index: 100;
     a {
         display: flex;
         align-items: center;
