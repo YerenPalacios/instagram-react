@@ -12,7 +12,7 @@ export default function HomeSide() {
     const { get } = useFetch()
 
     useEffect(() => {
-        get('user/').then(data => {
+        get('user/?suggested=true').then(data => {
             setUsers(data?.map((i: User) => <ProfileInfo key={i.id} data={i} />))
         })
     }, [])

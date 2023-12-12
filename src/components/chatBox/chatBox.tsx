@@ -71,6 +71,49 @@ type ChatRoom = {
     user: User
 }
 
+
+function useWebSocket({initial_room_id}:{initial_room_id: number, token: string}){
+    const [ws, setWs] = useState<WebSocket>()
+    const [connectionStatus, setConnectionStatus] = useState(3)
+    const [room_id, setRoomId] = useState(initial_room_id)
+    const [data, setData] = useState<any[]>([])
+    const { error, setError } = useContext(ApiErrorContext)
+    const { auth } = useContext(AuthContext);
+
+    useEffect(() => {
+        let ws = new WebSocket(api.ws + `chat2/?room_id=${room_id}&token=${auth.token}`)
+        setWs(ws)
+        return () => { setData([]); ws.close() }
+    }, []);
+
+    if (ws) {
+        ws.onopen = (e) => {
+            console.warn('WebSocket Connected');
+            setConnectionStatus(ws.readyState)
+        }
+        ws.onmessage = (e) => {
+            const data = JSON.parse(e.data)
+            if (data.detail)
+                return setError(data.detail)
+
+            if (data.type === 'get_messages') {
+                const saved_messages: Message[] = data.data;
+                setData(saved_messages.sort((a, b) => a.id - b.id));
+            } else {
+                console.warn(data.text)
+                setData(data.concat(data.text))
+            }
+        }
+        ws.onclose = () => {
+            console.warn('WebSocket Disconnected');
+            setConnectionStatus(ws.readyState)
+        }
+
+    }
+    
+}
+
+
 export default function ChatBox({ room }: { room: ChatRoom }) {
     const [ws, setWs] = useState<WebSocket>()
     const [connectionStatus, setConnectionStatus] = useState(3)
@@ -78,6 +121,7 @@ export default function ChatBox({ room }: { room: ChatRoom }) {
     const items_div = document.getElementById('items')
     const { auth } = useContext(AuthContext);
     const { error, setError } = useContext(ApiErrorContext)
+    // const { ws } = useWebSocket(room.id)
 
     useEffect(() => {
         let ws = new WebSocket(api.ws + `chat2/?room_id=${room.id}&token=${auth?.token}`)
@@ -100,11 +144,11 @@ export default function ChatBox({ room }: { room: ChatRoom }) {
                 return setError(data.detail)
 
             if (data.type === 'get_messages') {
-                const saved_messages = data.data;
-                setMessages(saved_messages);
+                const saved_messages: Message[] = data.data;
+                setMessages(saved_messages.sort((a, b) => a.id - b.id));
             } else {
-                console.warn(data)
-                setMessages(messages.concat(data))
+                console.warn(data.text)
+                setMessages(messages.concat(data.text))
             }
         }
         ws.onclose = () => {

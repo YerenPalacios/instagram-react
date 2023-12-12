@@ -50,6 +50,7 @@ type PostComment = {
 }
 
 type Message = {
+    id: number
     content: string,
     is_post: boolean,
     room: number,

@@ -12,6 +12,7 @@ export default function ChatListHook(){
     }, [])
 
     const createChatPostMessage = (chat_room_id: number, post_id:number, text: string)=>{
+        
         return post('share-post/', {chat_room_id, post_id, text})
     }
     
