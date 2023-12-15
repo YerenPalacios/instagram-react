@@ -4,7 +4,7 @@ import React, { useState, useContext, FormEvent, ChangeEvent } from 'react';
 import { getUserImage, useFetch } from '../../helpers';
 import { useTranslation } from 'react-i18next'
 import { default as ico } from '../icons'
-import SimpleImageSlider from 'react-simple-image-slider'
+// import SimpleImageSlider from 'react-simple-image-slider'
 import { AuthContext, PostContext } from '../../context/datacontext';
 
 
@@ -105,13 +105,14 @@ export default function NewPost({ hide }: { hide: Function }) {
                     <h1>Crea una nueva publicación <label htmlFor="send">Compartir</label></h1>
                     <form onSubmit={handleSubmit} className='form'>
                         <div className="actual-media">
-                            <SimpleImageSlider
+                            Slider?
+                            {/* <SimpleImageSlider
                                 width={296}
                                 height={304}
                                 images={actualMedia}
                                 showBullets={true}
                                 showNavs={true}
-                            />
+                            /> */}
                         </div>
                         <div className="form-data">
                             <div className="user">

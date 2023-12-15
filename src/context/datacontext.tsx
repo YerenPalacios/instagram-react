@@ -15,7 +15,7 @@ type AuthContextProps = {
 
 export const AuthContext = createContext<AuthContextProps>({ auth: undefined, setAuth: () => { }, saveAuth: () => { } })
 
-export const AuthProvider: React.FC = ({ children }) => {
+export const AuthProvider: React.FC = ({ children }: any) => {
   const navigate = useNavigate()
   const [auth, setAuth] = useState(LocalStorage.get('auth'))
   useEffect(() => {
@@ -42,7 +42,7 @@ type ErrorContextProps = {
 
 export const ApiErrorContext = createContext<ErrorContextProps>({ error: '', setError: () => { }, type: 'error' })
 
-export const ApiErrorProvider: React.FC = ({ children }) => {
+export const ApiErrorProvider: React.FC = ({ children }: any) => {
   const [error, setErrorState] = useState("")
   const [type, setType] = useState('error')
   const setError = (data: any, type = 'error') => {
@@ -60,7 +60,7 @@ type PostContextProps = {
 
 export const PostContext = createContext<PostContextProps>({ posts: [], setPosts: () => { } })
 
-export const PostProvider: React.FC = ({ children }) => {
+export const PostProvider: React.FC = ({ children }: any) => {
   const [posts, setPosts] = useState<Post[]>([])
   return <PostContext.Provider value={{ posts, setPosts }}>{children}</PostContext.Provider>
 }
@@ -81,7 +81,7 @@ const PageContextDefault = {
 
 export const PageContext = createContext<PageContextProps>(PageContextDefault)
 
-export const PageProvider: React.FC = ({ children }) => {
+export const PageProvider: React.FC = ({ children }: any) => {
   const [limit, setLimit] = useState(PageContextDefault.limit)
   const [offset, setOffset] = useState(PageContextDefault.offset)
   return <PageContext.Provider value={{ limit, offset, setLimit, setOffset }}>{children}</PageContext.Provider>

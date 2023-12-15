@@ -60,7 +60,7 @@ export function useWebSocket({setComponentData, dependency}: wsParams){
 
     }
 
-    const send = (data) => {
+    const send = (data: any) => {
         ws?.send(JSON.stringify(data))
     }
     return {ws, send, connectionStatus}

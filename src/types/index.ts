@@ -13,7 +13,8 @@ type User = {
     color: string,
     followers_count: number | undefined,
     following_count: number | undefined,
-    posts_count: number | undefined
+    posts_count: number | undefined,
+    [key: string]: any,
 }
 
 type Auth = {

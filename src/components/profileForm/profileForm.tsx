@@ -11,12 +11,20 @@ export function ProfileForm() {
     const [currentImage, setCurrentImage] = useState<string>()
     const { error, setError } = useContext(ApiErrorContext)
 
-    const [updateData, setUpdateData] = useState({
+    interface UserParams {
         username: '',
         description: '',
         email: '',
         name: '',
-        image: {}
+        image: {},
+        [key: string]: string | Object
+    }
+    const [updateData, setUpdateData] = useState<UserParams>({
+        username: '',
+        description: '',
+        email: '',
+        name: '',
+        image: {},
     })
 
     useEffect(() => {
@@ -39,12 +47,17 @@ export function ProfileForm() {
         })
     }
 
+    //@ts-ignore
     const handleSubmitData = () => {
         const formData = new FormData();
         for (let key in updateData) {
             if (updateData.hasOwnProperty(key)) {
-                if (updateData[key] != authContext.auth?.user[key]) {
-                    formData.append(key, updateData[key]);
+                const value = updateData[key]
+                if (value != authContext.auth?.user[key]) {
+                    if (typeof value === "string")
+                        formData.append(key, value);
+                    else
+                        formData.append(key, JSON.stringify(value))
                 }
 
             }

@@ -3,7 +3,11 @@ import React from 'react'
 import { useEffect, useContext } from 'react';
 import { ApiErrorContext } from '../../context/datacontext';
 
-const NotificationColors = {
+interface NotificationColorsInterface {
+  [key: string]: string
+}
+
+const NotificationColors: NotificationColorsInterface = {
   'error': '#c11',
   'success': '#1c1'
 }

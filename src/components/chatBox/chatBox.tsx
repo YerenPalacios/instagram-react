@@ -77,7 +77,7 @@ export default function ChatBox({ room }: { room: ChatRoom }) {
 
     const addMessages = (data: any, type: string): void => {
         if (type === 'get_messages'){
-            setMessages(data.sort((a, b) => a.id - b.id));
+            setMessages(data.sort((a:any, b:any) => a.id - b.id));
         }
         if (type === 'add_message'){
             setMessages((prev)=>prev.concat(data))
