@@ -97,9 +97,9 @@ export default function Header() {
                 <Icon ico={ico.home} label={'Home'} type='link' to='/' />
                 <Icon ico={ico.search} label={'Search'} onClick={() => changeTab(<Search />)} />
                 <Icon ico={ico.share} label={'Messages'} type='link' to='/inbox' />
-                <Icon ico={ico.add} label={'Create'} onClick={() => setShowNewPostDiv(true)} />
+                <Icon className="create" ico={ico.add} label={'Create'} onClick={() => setShowNewPostDiv(true)} />
                 <Icon ico={ico.find} label={'Explore'} type='link' to='/explore' />
-                <Icon ico={ico.like_svg} label={'Notifications'} onClick={() => changeTab(<Notifications />)} />
+                <Icon className="notifications" ico={ico.like_svg} label={'Notifications'} onClick={() => changeTab(<Notifications />)} />
                 <UserMenu />
             </div>
             {showNewPostDiv && <NewPost hide={setShowNewPostDiv}></NewPost>}
@@ -117,18 +117,19 @@ type IconParams = {
     type?: string,
     to?: string,
     onClick?: ()=>void | null
+    className?: string
 }
 
-function Icon({ ico, label, type = 'button', to = '/', onClick }: IconParams) {
+function Icon({ ico, label, type = 'button', to = '/', onClick, className}: IconParams) {
     const location = useLocation()
     const getCurrent = (e: string) => {
         if (location.pathname === e) return 'current'
     }
     switch (type) {
         case 'link':
-            return <Link className={getCurrent(to)} to={to}>{ico} <span>{label}</span></Link>
+            return <Link className={getCurrent(to) + " " + className} to={to}>{ico} <span>{label}</span></Link>
 
         default:
-            return <button onClick={onClick}>{ico} <span>{label}</span></button>
+            return <button className={className} onClick={onClick}>{ico} <span>{label}</span></button>
     }
 }

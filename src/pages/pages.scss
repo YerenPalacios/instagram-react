@@ -11,6 +11,7 @@ body {
     overflow: hidden;
 }
 
+
 .container {
     width: 100%;
     padding: 10px;
@@ -58,5 +59,27 @@ body {
             height: 100%;
             object-fit: cover;
         }
+    }
+}
+
+
+
+@media only screen and (max-width: 600px)  {
+    #root{
+        display: unset;
+    }
+    .side_container{
+        width: 100%;
+        max-width: unset;
+    }
+    .flexContainer{
+        display: block;
+    }
+    .container{
+        padding: 0 !important;
+    }
+    html{
+        padding: 0;
+        margin: 0;
     }
 }

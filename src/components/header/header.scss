@@ -186,3 +186,56 @@ header .user-icon {
     transform: translate(-50%, -50%);
     opacity: .3;
 }
+
+
+
+@media only screen and (max-width: 600px)  {
+    header {
+        position:fixed;
+        height: auto;
+        width: 100%;
+        font-size: 4px;
+        bottom: 0; 
+        top:unset;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        .logo{
+            display: none;
+        }
+        .icons{
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(5, auto);
+            align-items: center;
+            justify-content: space-evenly;
+            a, button, .user-menu{
+                padding: 15px;
+                width: auto;
+                transform: scale(1.2)
+            }
+            svg{
+                margin: 0;
+                
+            }
+            span{
+                display: none;
+            }
+            .user-menu p{
+                display: none;
+            }
+            .create, .notifications{
+                display: none;
+            }
+            .user-menu{
+                padding: 15px;
+                .user-icon{
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+  
+  }

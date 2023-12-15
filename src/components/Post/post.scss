@@ -224,3 +224,13 @@
 .like-animation {
     animation: myAnimation .25s forwards;
 }
+
+@media only screen and (max-width: 600px){
+    .post{
+        width: 100%;
+        border: none;
+        min-width: unset;
+    }
+}
+
+
