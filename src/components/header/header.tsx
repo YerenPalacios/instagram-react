@@ -1,6 +1,6 @@
 import { default as ico } from '../icons'
 import './header.scss'
-import React, { useState, useEffect, useRef, ReactChild, ReactChildren, ReactElement } from 'react';
+import React, { useState, useEffect, useRef, ReactElement } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import NewPost from '../newPost/newPost';
 import { useContext } from 'react';
@@ -82,7 +82,7 @@ export default function Header() {
     const header = useRef<HTMLDivElement | null>(null)
 
     const changeTab = (component: ReactElement) => {
-        if (currentTab?.type == component?.type) {
+        if (currentTab?.type === component?.type) {
             header.current?.classList.remove('without_labels')
             setCurrentTab(undefined)
         } else {
@@ -99,7 +99,7 @@ export default function Header() {
                 <Icon ico={ico.share} label={'Messages'} type='link' to='/inbox' />
                 <Icon className="create" ico={ico.add} label={'Create'} onClick={() => setShowNewPostDiv(true)} />
                 <Icon ico={ico.find} label={'Explore'} type='link' to='/explore' />
-                <Icon className="notifications" ico={ico.like_svg} label={'Notifications'} onClick={() => changeTab(<Notifications />)} />
+                <Icon className="notificationsbutton" ico={ico.like_svg} label={'Notifications'} onClick={() => changeTab(<Notifications />)} />
                 <UserMenu />
             </div>
             {showNewPostDiv && <NewPost hide={setShowNewPostDiv}></NewPost>}

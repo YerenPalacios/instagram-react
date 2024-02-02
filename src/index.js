@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
@@ -42,9 +42,8 @@ i18n
       escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
     }
   });
-
-ReactDOM.render(
-
+const root = createRoot(document.getElementById('root'))
+root.render(
   <BrowserRouter>
     <Provider store={store}>
       <AuthProvider>
@@ -70,15 +69,13 @@ ReactDOM.render(
               <PostWindow></PostWindow>
               <SharingPostWindow></SharingPostWindow>
               <LoginWindow></LoginWindow>
-                           
+
             </PageProvider>
           </PostProvider>
         </ApiErrorProvider>
       </AuthProvider>
     </Provider>
   </BrowserRouter>
-  ,
-  document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

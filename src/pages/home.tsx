@@ -9,7 +9,7 @@ import { PageContext, PostContext } from '../context/datacontext'
 import Loading from '../components/Base/loading/loading'
 
 export default function Home() {
-    const { get, loading } = useFetch()
+    const { get } = useFetch()
     const { posts, setPosts } = useContext(PostContext)
     const { offset, limit } = useContext(PageContext)
 

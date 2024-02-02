@@ -83,7 +83,7 @@ export default function Post({ data, type }: { data: Post, type?: string }) {
     }
 
     useEffect(() => {
-        if (type == 'small') {
+        if (type === 'small') {
             get('comment/?post=' + data.id).then(
                 data => setComments(data)
             )

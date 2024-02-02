@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext, ChangeEvent } from "react"
-import api from '../../api.json'
 import { ApiErrorContext, AuthContext } from "../../context/datacontext"
-import { UpdateUserSesion, getUserImage, useFetch } from '../../helpers'
+import { getUserImage, useFetch } from '../../helpers'
 import './profileForm.scss'
 
 
@@ -9,7 +8,7 @@ export function ProfileForm() {
     const authContext = useContext(AuthContext)
     const { get, updateUser } = useFetch()
     const [currentImage, setCurrentImage] = useState<string>()
-    const { error, setError } = useContext(ApiErrorContext)
+    const { setError } = useContext(ApiErrorContext)
 
     interface UserParams {
         username: '',
@@ -53,7 +52,7 @@ export function ProfileForm() {
         for (let key in updateData) {
             if (updateData.hasOwnProperty(key)) {
                 const value = updateData[key]
-                if (value != authContext.auth?.user[key]) {
+                if (value !== authContext.auth?.user[key]) {
                     if (typeof value === "string")
                         formData.append(key, value);
                     else

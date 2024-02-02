@@ -10,7 +10,7 @@ export default function ProfilesList({ limit = null }: {limit?: number | null}) 
     useEffect(() => {
         let page_size = limit ? `page_size=${limit}` : ''
         get('user/?' + page_size).then(data => {
-            setUsers(data.map((i: User) => <ProfileInfo style='bigger' key={i.id} data={i} />))
+            setUsers(data.map((i: User) => <ProfileInfo className='bigger' key={i.id} data={i} />))
         })
     }, [])
 

@@ -21,7 +21,7 @@ function ProfileBody() {
     function get_filter_for_tab(tab: string | undefined) {
         if (tab === 'saved') {
             return 'is_saved=True'
-        } else if (tab == 'tagged') {
+        } else if (tab === 'tagged') {
             return '' //TODO: review how to do this
         } else {
             return 'user=' + auth?.user.id
@@ -35,7 +35,7 @@ function ProfileBody() {
             setPosts(prev => {
                 let a = [...prev]
                 data.forEach(i => {
-                    if (!a.find(item => item.id == i.id)) {
+                    if (!a.find(item => item.id === i.id)) {
                         a.push(i)
                     }
                 })

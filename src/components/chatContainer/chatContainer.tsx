@@ -59,7 +59,7 @@ export default function ChatContainer() {
                     {users.map((i, k) => {
                         let className = "person"
                         // review if it is group chat
-                        if (i.user.username == username){
+                        if (i.user.username === username){
                             className += " current-person"
                         }
 

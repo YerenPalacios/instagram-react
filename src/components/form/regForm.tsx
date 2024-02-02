@@ -26,7 +26,7 @@ export function RegForm() {
         let username: string | undefined = usernameInput.current?.value
         let password: string | undefined = passInput.current?.value
 
-        if (email?.length || phone?.length && name?.length && password?.length) {
+        if ((email?.length || phone?.length) && name?.length && password?.length) {
             sign({ ...email ? { email } : { phone }, name, username, password })
                 .then((data: Auth) => {
                     if (data.token) {

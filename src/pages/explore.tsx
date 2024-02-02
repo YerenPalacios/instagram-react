@@ -22,7 +22,7 @@ export default function Explore() {
             setPosts(prev => {
                 let a = [...prev]
                 data.forEach(i => {
-                    if (!a.find(item => item.id == i.id)) {
+                    if (!a.find(item => item.id === i.id)) {
                         a.push(i)
                     }
                 })
