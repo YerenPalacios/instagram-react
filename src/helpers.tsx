@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { ApiErrorContext, AuthContext } from './context/datacontext'
@@ -186,4 +186,32 @@ export function getUserImage(user: User) {
     }, 10000);
 
     return url
+}
+
+
+export function useComponentVisible(initialIsVisible: boolean) {
+    const [isVisible, setIsComponentVisible] = useState<Boolean>(initialIsVisible);
+    const ref = useRef<HTMLDivElement | null>(null);
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (ref.current && !ref.current.contains(event.target as Node)) {
+            setIsComponentVisible(false);
+        }
+    };
+    const handleClickin = (event: MouseEvent) => {
+        if (ref.current && ref.current.contains(event.target as Node)) {
+            setIsComponentVisible(true);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside, true);
+        document.addEventListener('click', handleClickin, true);
+        return () => {
+            document.removeEventListener('click', handleClickOutside, true);
+            document.removeEventListener('click', handleClickin, true);
+        };
+    }, []);
+
+    return { ref, isVisible, setIsComponentVisible };
 }

@@ -71,7 +71,6 @@ export default function ImageSlider({ images }: { images: PostFile[] }) {
         if (sliderRef.current) {
             sliderRef.current.scrollTo(scrollLeft, 0)
         }
-        console.log(images)
     }, [scrollLeft])
 
     return <section className='slider'>

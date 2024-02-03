@@ -32,7 +32,6 @@ export default function Page({ children, padding = true }: PageProps) {
       }
     }
   }
-  console.log(padding)
   return <>
     <Header />
     <div style={{ padding: padding ? 10 : 0 }} ref={containerRef} className="container">
