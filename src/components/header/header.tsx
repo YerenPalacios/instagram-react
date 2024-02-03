@@ -25,6 +25,7 @@ export default function Header() {
     return (
         <header ref={header}>
             <div className='logo'>{header.current?.className === 'without_labels' ? ico.ig : ico.logo}</div>
+            <div className='logosm'>{ico.ig}</div>
             <div className="icons">
                 <Icon ico={ico.home} label={'Home'} type='link' to='/' />
                 <Icon ico={ico.search} label={'Search'} onClick={() => changeTab(<Search />)} />

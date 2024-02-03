@@ -4,7 +4,7 @@ header {
     box-sizing: border-box;
     width: 100%;
     height: 100vh;
-    overflow-x:visible;
+    overflow-x: visible;
     background-color: #fff;
     border: 1px solid #e6e6e6;
     align-items: center;
@@ -16,13 +16,17 @@ header {
     z-index: 100;
     color: #262626;
 
-    .label{
+    .label {
         margin: 0;
     }
 
     .logo {
-        padding: 30px 0;
+        padding: 20px 0;
         margin-left: 10px;
+    }
+
+    .logosm {
+        display: none;
     }
 
     input {
@@ -52,9 +56,10 @@ header {
 
     button,
     a {
-        &:hover{
+        &:hover {
             background-color: #f7f7f7;
         }
+
         background-color: transparent;
         border: none;
         display: flex;
@@ -63,14 +68,15 @@ header {
         padding: 5px;
         font-size: 15px;
     }
-    .current{
+
+    .current {
         font-weight: 500;
     }
 
-    .extra_div{
+    .extra_div {
         position: absolute;
         left: 80px;
-        top:0;
+        top: 0;
         height: 100vh;
         background: #fff;
         width: 350px;
@@ -78,85 +84,99 @@ header {
         box-shadow: 13px 0px 20px -5px rgba(0, 0, 0, 0.1);
         border-left: 2px solid #efefef;
 
-        h4{
+        h4 {
             padding-left: 20px;
             margin-bottom: 0;
         }
     }
 
+    .user-menu {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    a,
+    button,
+    .user-menu {
+        border-radius: 5px;
+        padding: 15px;
+        padding-right: 60px;
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .user-icon {
+        @extend .image;
+        width: 25px;
+        height: 25px;
+    }
+
+    .menu {
+        position: absolute;
+        left: -3px;
+        bottom: 55px;
+        background-color: #fff;
+        box-shadow: 0 -1px 5px 1px rgb(0 0 0 / 10%);
+        font-size: 14px;
+        padding: 5px 0;
+        z-index: 100;
+        border-radius: 5px;
+
+        a:hover {
+            background-color: #f8f8f8
+        }
+
+        p {
+            border-top: 1px solid #ddd;
+            padding: 10px 20px;
+            padding-right: 60px;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        a,
+        button {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+
+            svg {
+                width: 15px;
+                height: 15px;
+                margin-right: 10px;
+            }
+        }
+    }
+
+
 }
-header[class=without_labels]{
-    .icons{
-        a, button{
-            span{
+
+header[class=without_labels] {
+    .icons {
+
+        a,
+        button {
+            span {
                 display: none;
             }
         }
     }
-    .label{
+
+    .label {
         display: none;
     }
 }
 
 .search {
     position: relative;
-}
-
-
-header .user-menu {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-header .menu {
-    position: absolute;
-    right: -10px;
-    bottom: 55px;
-    background-color: #fff;
-    box-shadow: 0 -1px 5px 1px rgb(0 0 0 / 10%);
-    font-size: 14px;
-    padding: 5px 0;
-    z-index: 100;
-    a {
-        display: flex;
-        align-items: center;
-        padding: 15px 20px;
-    }
-}
-
-header a,
-header button,
-header .user-menu {
-    border-radius: 5px;
-    padding: 15px ;
-    padding-right: 60px;
-    margin: 0;
-    width: 100%;
-    box-sizing: border-box;
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-    color: inherit;
-    text-decoration: none;
-}
-
-header .menu a svg {
-    width: 15px;
-    margin-right: 10px;
-}
-
-header .menu a:hover {
-    background-color: #f8f8f8
-}
-
-header .menu p {
-    border-top: 1px solid #ddd;
-    padding: 10px 20px;
-    padding-right: 60px;
-    cursor: pointer;
-    margin: 0;
 }
 
 header .menu::after {
@@ -172,13 +192,6 @@ header .menu::after {
     bottom: -5px;
 }
 
-header .user-icon {
-    @extend .image;
-    width: 25px;
-    height: 25px;
-}
-
-
 .loading {
     position: absolute;
     left: 50%;
@@ -188,54 +201,125 @@ header .user-icon {
 }
 
 
+header {
+    @media screen and (max-width: 1280px) {
+        .icons span {
+            display: none
+        }
 
-@media only screen and (max-width: 600px)  {
+        .logosm {
+            display: block;
+            padding: 23px 12px;
+        }
+
+        .logo {
+            display: none;
+        }
+
+        a,
+        button,
+        .user-menu {
+            padding: 15px 12px;
+        }
+
+        .user-menu {
+            display: block;
+
+            .label {
+                display: none;
+            }
+        }
+
+        svg {
+            margin: 0;
+        }
+    }
+}
+
+
+@media only screen and (max-width: 660px) {
     header {
-        position:fixed;
+        position: fixed;
         height: auto;
         width: 100%;
         font-size: 4px;
-        bottom: 0; 
-        top:unset;
+        bottom: 0;
+        top: unset;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 0;
-        .logo{
+
+        .logo,
+        .logosm {
             display: none;
         }
-        .icons{
+
+        .icons {
             width: 100%;
             display: grid;
-            grid-template-columns: repeat(5, auto);
+            grid-template-columns: repeat(6, auto);
             align-items: center;
             justify-content: space-evenly;
-            a, button, .user-menu{
+
+            a,
+            button,
+            .user-menu {
                 padding: 15px;
                 width: auto;
                 transform: scale(1.2)
             }
-            svg{
+
+            svg {
                 margin: 0;
-                
+
             }
-            span{
+
+            span {
                 display: none;
             }
-            .user-menu p{
+
+            .create,
+            .notifications {
                 display: none;
             }
-            .create, .notifications{
-                display: none;
-            }
-            .user-menu{
+
+            .user-menu {
                 padding: 15px;
-                .user-icon{
+
+                .user-icon {
                     margin: 0;
                 }
             }
         }
-    }
 
-  
-  }
+        .menu {
+            left: unset;
+            right: -10px;
+            bottom: 56px;
+            padding: 2px 20px;
+
+            button,
+            a {
+                padding: 10px;
+                font-size: 12px;
+
+                svg {
+                    width: 12px;
+                    height: 12px;
+                }
+            }
+
+            &::after {
+                display: none;
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width: 1280px) {
+    #root {
+        grid-template-columns: 80px auto !important;
+    }
+}
